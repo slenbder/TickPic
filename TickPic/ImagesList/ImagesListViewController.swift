@@ -1,3 +1,10 @@
+//
+//  ImagesListCell.swift
+//  TickPic
+//
+//  Created by Кирилл Марьясов on 10.04.2024.
+//
+
 import UIKit
 
 class ImagesListViewController: UIViewController {
