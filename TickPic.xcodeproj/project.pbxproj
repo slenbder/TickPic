@@ -13,6 +13,7 @@
 		4F4C7EE62BBEFA8E00F8E8BA /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 4F4C7EE52BBEFA8E00F8E8BA /* Base */; };
 		4F4C7EE82BBEFA8F00F8E8BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4C7EE72BBEFA8F00F8E8BA /* Assets.xcassets */; };
 		4F4C7EEB2BBEFA8F00F8E8BA /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 4F4C7EEA2BBEFA8F00F8E8BA /* Base */; };
+		4F92B8752BD0422E0070FC53 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */; };
 		4FC87F142BC708D1009E0409 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC87F132BC708D1009E0409 /* ImagesListCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		4F4C7EE72BBEFA8F00F8E8BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F4C7EEA2BBEFA8F00F8E8BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4F4C7EEC2BBEFA8F00F8E8BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4FC87F132BC708D1009E0409 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +64,7 @@
 				4F4C7EE02BBEFA8E00F8E8BA /* SceneDelegate.swift */,
 				4FC87F122BC70891009E0409 /* ImagesList */,
 				4F4C7EE42BBEFA8E00F8E8BA /* Main.storyboard */,
+				4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */,
 				4F4C7EE72BBEFA8F00F8E8BA /* Assets.xcassets */,
 				4F4C7EE92BBEFA8F00F8E8BA /* LaunchScreen.storyboard */,
 				4F4C7EEC2BBEFA8F00F8E8BA /* Info.plist */,
@@ -151,6 +154,7 @@
 			files = (
 				4F4C7EE32BBEFA8E00F8E8BA /* ImagesListViewController.swift in Sources */,
 				4F4C7EDF2BBEFA8E00F8E8BA /* AppDelegate.swift in Sources */,
+				4F92B8752BD0422E0070FC53 /* ProfileViewController.swift in Sources */,
 				4F4C7EE12BBEFA8E00F8E8BA /* SceneDelegate.swift in Sources */,
 				4FC87F142BC708D1009E0409 /* ImagesListCell.swift in Sources */,
 			);
