@@ -6,7 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -74,7 +73,6 @@
                                             <outlet property="cellImage" destination="KD7-J7-CA8" id="hYB-YK-elf"/>
                                             <outlet property="dateLabel" destination="7Gg-8Y-hL8" id="RyQ-Vp-jed"/>
                                             <outlet property="likeButton" destination="ImH-jZ-F0c" id="s50-Se-loi"/>
-                                            <segue destination="IZD-mr-QcE" kind="show" id="kie-BK-oE6"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -96,6 +94,7 @@
                     <navigationItem key="navigationItem" id="blh-Vt-dEf"/>
                     <connections>
                         <outlet property="tableView" destination="RQ0-ij-LEN" id="ZpL-Xn-5Qm"/>
+                        <segue destination="IZD-mr-QcE" kind="presentation" identifier="ShowSingleImage" modalPresentationStyle="fullScreen" modalTransitionStyle="flipHorizontal" id="hKO-QV-auk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -105,22 +104,36 @@
         <!--Single Image View Controller-->
         <scene sceneID="4zb-gC-Jld">
             <objects>
-                <viewController id="IZD-mr-QcE" customClass="SingleImageViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="IZD-mr-QcE" customClass="SingleImageViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lpk-Zm-dPL">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="RrL-dG-5tb">
-                                <rect key="frame" x="0.0" y="103" width="430" height="746"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="RrL-dG-5tb">
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KuD-Wh-r7b">
+                                <rect key="frame" x="9" y="9" width="48" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="nSL-2W-zFJ"/>
+                                    <constraint firstAttribute="width" constant="48" id="p7Y-Bg-VYK"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="Backward"/>
+                                <connections>
+                                    <action selector="didTapBackButton" destination="IZD-mr-QcE" eventType="touchUpInside" id="bbg-UM-85d"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YKr-eb-Pfd"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstItem="RrL-dG-5tb" firstAttribute="leading" secondItem="YKr-eb-Pfd" secondAttribute="leading" id="IIe-tk-BLU"/>
-                            <constraint firstItem="YKr-eb-Pfd" firstAttribute="trailing" secondItem="RrL-dG-5tb" secondAttribute="trailing" id="Mwe-O7-8k7"/>
-                            <constraint firstItem="RrL-dG-5tb" firstAttribute="bottom" secondItem="YKr-eb-Pfd" secondAttribute="bottom" id="pIP-Fg-Ywd"/>
-                            <constraint firstItem="RrL-dG-5tb" firstAttribute="top" secondItem="YKr-eb-Pfd" secondAttribute="top" id="yss-9j-xwI"/>
+                            <constraint firstItem="KuD-Wh-r7b" firstAttribute="top" secondItem="YKr-eb-Pfd" secondAttribute="top" constant="9" id="1aG-sb-R69"/>
+                            <constraint firstAttribute="leading" secondItem="RrL-dG-5tb" secondAttribute="leading" id="IIe-tk-BLU"/>
+                            <constraint firstAttribute="trailing" secondItem="RrL-dG-5tb" secondAttribute="trailing" id="Mwe-O7-8k7"/>
+                            <constraint firstItem="KuD-Wh-r7b" firstAttribute="leading" secondItem="YKr-eb-Pfd" secondAttribute="leading" constant="9" id="bYc-ZJ-33c"/>
+                            <constraint firstAttribute="bottom" secondItem="RrL-dG-5tb" secondAttribute="bottom" id="pIP-Fg-Ywd"/>
+                            <constraint firstAttribute="top" secondItem="RrL-dG-5tb" secondAttribute="top" id="yss-9j-xwI"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="eH6-DR-gQe"/>
@@ -248,6 +261,7 @@
     </scenes>
     <resources>
         <image name="0" width="570" height="250"/>
+        <image name="Backward" width="24" height="24"/>
         <image name="Exit" width="24" height="24"/>
         <image name="Photo" width="70" height="70"/>
         <image name="like_button_on" width="42" height="42"/>
@@ -259,8 +273,5 @@
         <namedColor name="YP Black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>
