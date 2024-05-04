@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F41005E2BE696B400473381 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F41005D2BE696B400473381 /* Constants.swift */; };
 		4F4C7EDF2BBEFA8E00F8E8BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C7EDE2BBEFA8E00F8E8BA /* AppDelegate.swift */; };
 		4F4C7EE12BBEFA8E00F8E8BA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C7EE02BBEFA8E00F8E8BA /* SceneDelegate.swift */; };
 		4F4C7EE32BBEFA8E00F8E8BA /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C7EE22BBEFA8E00F8E8BA /* ImagesListViewController.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F41005D2BE696B400473381 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4F4C7EDB2BBEFA8E00F8E8BA /* TickPic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TickPic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4C7EDE2BBEFA8E00F8E8BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F4C7EE02BBEFA8E00F8E8BA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -46,6 +48,7 @@
 		4F4C7ED22BBEFA8E00F8E8BA = {
 			isa = PBXGroup;
 			children = (
+				4F41005D2BE696B400473381 /* Constants.swift */,
 				4F4C7EDD2BBEFA8E00F8E8BA /* TickPic */,
 				4F4C7EDC2BBEFA8E00F8E8BA /* Products */,
 			);
@@ -159,6 +162,7 @@
 				4F4C7EDF2BBEFA8E00F8E8BA /* AppDelegate.swift in Sources */,
 				4F92B8752BD0422E0070FC53 /* ProfileViewController.swift in Sources */,
 				4F4C7EE12BBEFA8E00F8E8BA /* SceneDelegate.swift in Sources */,
+				4F41005E2BE696B400473381 /* Constants.swift in Sources */,
 				4F6CEFCC2BD544F1004ECE99 /* SingleImageViewController.swift in Sources */,
 				4FC87F142BC708D1009E0409 /* ImagesListCell.swift in Sources */,
 			);
