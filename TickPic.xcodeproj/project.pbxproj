@@ -48,7 +48,6 @@
 		4F4C7ED22BBEFA8E00F8E8BA = {
 			isa = PBXGroup;
 			children = (
-				4F41005D2BE696B400473381 /* Constants.swift */,
 				4F4C7EDD2BBEFA8E00F8E8BA /* TickPic */,
 				4F4C7EDC2BBEFA8E00F8E8BA /* Products */,
 			);
@@ -74,6 +73,7 @@
 				4F4C7EE92BBEFA8F00F8E8BA /* LaunchScreen.storyboard */,
 				4F4C7EEC2BBEFA8F00F8E8BA /* Info.plist */,
 				4F6CEFCB2BD544F1004ECE99 /* SingleImageViewController.swift */,
+				4F41005D2BE696B400473381 /* Constants.swift */,
 			);
 			path = TickPic;
 			sourceTree = "<group>";
