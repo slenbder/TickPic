@@ -1,5 +1,5 @@
 //
-//  ImagesListCell.swift
+//  ImagesListViewController.swift
 //  TickPic
 //
 //  Created by Кирилл Марьясов on 10.04.2024.

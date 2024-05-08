@@ -58,40 +58,33 @@ final class OAuth2Service {
             return
         }
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(NetworkError.urlRequestError(error)))
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(.failure(NetworkError.urlSessionError))
-                return
-            }
-            
-            guard (200..<300).contains(httpResponse.statusCode) else {
-                completion(.failure(NetworkError.httpStatusCode(httpResponse.statusCode)))
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(NetworkError.urlSessionError))
-                return
-            }
-            
-            do {
-                let tokenResponse = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                let accessToken = tokenResponse.accessToken
-                self.tokenStorage.token = accessToken
-                DispatchQueue.main.async {
-                    completion(.success(accessToken))
+        URLSession.shared.data(for: request) { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let tokenResponse = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
+                    let accessToken = tokenResponse.accessToken
+                    
+                    // Сохраняем токен в хранилище
+                    self.tokenStorage.token = accessToken
+                    
+                    // Уведомляем об успешной авторизации с передачей токена
+                    DispatchQueue.main.async {
+                        completion(.success(accessToken))
+                    }
+                } catch {
+                    // Если не удалось декодировать ответ, возвращаем ошибку
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
                 }
-            } catch {
-                print("Error decoding token response: \(error)")
+            case .failure(let error):
+                // Если произошла ошибка при получении данных, возвращаем ошибку
                 DispatchQueue.main.async {
                     completion(.failure(error))
                 }
             }
-        }.resume()
+        }
     }
+
 }

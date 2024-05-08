@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Olm-xO-ttd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YJd-2M-alO">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="5120" identifier="iOS"/>
@@ -13,13 +13,13 @@
         <!--ImagesListViewController-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="ImageList" id="BYZ-38-t0r" userLabel="ImagesListViewController" customClass="ImagesListViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ImagesListViewController" title="ImageList" id="BYZ-38-t0r" userLabel="ImagesListViewController" customClass="ImagesListViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="RQ0-ij-LEN">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                                 <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationWidth="10" reuseIdentifier="ImagesListCell" rowHeight="200" id="5mC-zv-dqS" customClass="ImagesListCell" customModule="TickPic" customModuleProvider="target">
@@ -172,20 +172,20 @@
         <!--Auth View Controller-->
         <scene sceneID="Vta-4Y-XXZ">
             <objects>
-                <viewController id="Pwf-gh-a2P" customClass="AuthViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="Pwf-gh-a2P" customClass="AuthViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Rvd-I1-sLm">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="auth_screen_logo" translatesAutoresizingMaskIntoConstraints="NO" id="nJR-FF-pYs">
-                                <rect key="frame" x="185" y="470.66666666666669" width="60" height="60.000000000000057"/>
+                                <rect key="frame" x="185" y="459" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="bdZ-gg-Y3Y"/>
                                     <constraint firstAttribute="width" constant="60" id="gUh-Co-w3t"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZIF-93-iO3">
-                                <rect key="frame" x="16" y="726" width="398" height="48"/>
+                                <rect key="frame" x="16" y="750" width="398" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="dGa-OO-0Gb"/>
                                 </constraints>
@@ -222,13 +222,13 @@
         <!--Web View View Controller-->
         <scene sceneID="Gq9-Bq-oAR">
             <objects>
-                <viewController id="if2-we-AN8" customClass="WebViewViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="if2-we-AN8" customClass="WebViewViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WqB-Ap-yqI">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lOl-fI-Fec">
-                                <rect key="frame" x="0.0" y="103" width="430" height="829"/>
+                                <rect key="frame" x="0.0" y="56" width="430" height="866"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -236,7 +236,7 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="zIG-gU-dup">
-                                <rect key="frame" x="0.0" y="103" width="430" height="4"/>
+                                <rect key="frame" x="0.0" y="56" width="430" height="4"/>
                                 <color key="tintColor" name="ypBlack"/>
                             </progressView>
                         </subviews>
@@ -262,10 +262,30 @@
             </objects>
             <point key="canvasLocation" x="2438" y="-731"/>
         </scene>
+        <!--Splash View Controller-->
+        <scene sceneID="tOm-oe-Dsx">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="YJd-2M-alO" userLabel="Splash View Controller" customClass="SplashViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="adE-SK-vyE">
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Llz-WR-dvk"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <connections>
+                        <segue destination="Olm-xO-ttd" kind="show" identifier="showAuthenticationScreenSegueIdentifier" id="AWe-ng-3PI"/>
+                        <segue destination="FY2-qV-LV0" kind="show" identifier="showAuthenticationScreenSegueIdentifier" id="Mz1-67-xPS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="epH-RY-xnR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-54" y="-167"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="xSp-YN-Ew0">
             <objects>
-                <tabBarController id="FY2-qV-LV0" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="FY2-qV-LV0" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="XZI-dE-J4J"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1yH-a2-QQI">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -288,7 +308,7 @@
             <objects>
                 <viewController id="Uvc-AT-IWI" customClass="ProfileViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3PM-db-FAd" customClass="Profile">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="bqE-d3-3Kj"/>
                         <color key="backgroundColor" name="YP Black"/>
@@ -302,10 +322,11 @@
         <!--Navigation Controller-->
         <scene sceneID="SZ1-ne-r4Y">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Olm-xO-ttd" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="Olm-xO-ttd" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="EAz-Bl-ZB4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="nav_back_button" id="3jK-ek-aLw">
-                        <rect key="frame" x="0.0" y="59" width="430" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="YP Black"/>
                     </navigationBar>
