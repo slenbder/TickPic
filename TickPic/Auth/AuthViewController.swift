@@ -6,51 +6,53 @@
 //
 
 import UIKit
+import WebKit
 
 protocol AuthViewControllerDelegate: AnyObject {
-    func didAuthenticate(_ vc: AuthViewController)
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode: String)
 }
 
 final class AuthViewController: UIViewController {
-    let ShowWebViewSegueIdentifier = "ShowWebView"
-    
     weak var delegate: AuthViewControllerDelegate?
-
+    private let showWebViewSegueIdentifier = "ShowWebView"
+    private let oauth2Service = OAuth2Service.shared
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureBackButton()
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowWebViewSegueIdentifier {
-            guard let webViewViewController = segue.destination as? WebViewViewController else {
-                fatalError("Failed to prepare for \(ShowWebViewSegueIdentifier)")
-            }
+        if segue.identifier == showWebViewSegueIdentifier {
+            guard let webViewViewController = segue.destination as? WebViewViewController
+            else { fatalError("Failed to prepare for \(showWebViewSegueIdentifier)") }
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
     }
     
-    private func configureBackButton() {
-        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem?.tintColor = UIColor(named: "ypBlack")
+    func switchToTabBarController() {
+        guard let window = UIApplication.shared.windows.first else {
+            fatalError("No available window to set root view controller")
+        }
+        
+        let tabBarController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarViewController")
+        window.rootViewController = tabBarController
     }
-    
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        // Вызываем метод делегата, чтобы сообщить о завершении авторизации
-        delegate?.didAuthenticate(self)
+        oauth2Service.fetchOAuthToken(with: code) { [weak self] result in
+            switch result {
+            case .success(let accessToken):
+                print("Access token obtained: \(accessToken)")
+                self?.switchToTabBarController()
+            case .failure(let error):
+                print("Failed to obtain access token: \(error)")
+            }
+        }
     }
-
+    
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
     }
-    
 }
 

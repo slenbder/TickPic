@@ -273,7 +273,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
-                        <segue destination="Olm-xO-ttd" kind="presentation" identifier="showAuthenticationScreenSegueIdentifier" modalPresentationStyle="fullScreen" id="s3C-s6-yvz"/>
+                        <segue destination="Olm-xO-ttd" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" id="s3C-s6-yvz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="epH-RY-xnR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
