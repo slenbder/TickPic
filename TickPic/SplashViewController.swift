@@ -9,29 +9,27 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     
+    let tokenStorage = OAuth2TokenStorage.shared
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Проверяем наличие токена авторизации
-        let tokenStorage = OAuth2TokenStorage()
         if tokenStorage.token != nil {
-            // Если токен авторизации есть, переходим к экрану галереи
-            switchToGalleryViewController()
+            switchToTabBarController()
         } else {
-            // Если токена авторизации нет, переходим к экрану авторизации
             performSegue(withIdentifier: "showAuthenticationScreenSegueIdentifier", sender: nil)
         }
     }
     
-    private func switchToGalleryViewController() {
-        // Получаем экземпляр UITabBarController из сториборда
+    private func switchToTabBarController() {
         guard let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
                 fatalError("Failed to instantiate UITabBarController from storyboard")
         }
         
-        // Устанавливаем главный таб-контроллер как корневой контроллер
-        UIApplication.shared.windows.first?.rootViewController = tabBarController
+        DispatchQueue.main.async {
+            UIApplication.shared.windows.first?.rootViewController = tabBarController
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -45,13 +43,11 @@ final class SplashViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    
 }
 
 extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
-        // Вызываем метод делегата для сообщения об успешной авторизации
-        switchToGalleryViewController()
+        switchToTabBarController()
     }
 }
 

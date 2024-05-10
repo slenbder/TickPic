@@ -10,14 +10,7 @@ import Foundation
 final class OAuth2Service {
     static let shared = OAuth2Service()
     
-    let tokenStorage = OAuth2TokenStorage()
-    
     private init() {}
-    
-    private (set) var authToken: String? {
-        get { tokenStorage.token }
-        set { tokenStorage.token = newValue }
-    }
     
     private func makeOAuthTokenRequest(with code: String) -> URLRequest? {
         guard let url = URL(string: "https://unsplash.com/oauth/token") else {
@@ -66,7 +59,7 @@ final class OAuth2Service {
                     let accessToken = tokenResponse.accessToken
                     
                     // Сохраняем токен в хранилище
-                    self.tokenStorage.token = accessToken
+                    OAuth2TokenStorage.shared.token = accessToken
                     
                     // Уведомляем об успешной авторизации с передачей токена
                     DispatchQueue.main.async {
@@ -86,5 +79,4 @@ final class OAuth2Service {
             }
         }
     }
-
 }

@@ -9,14 +9,16 @@ import Foundation
 import WebKit
 
 class OAuth2TokenStorage {
-    private let tokenKey = "OAuth2AccessToken"
+    
+    static let shared = OAuth2TokenStorage()
+    
+    private init() {}
+    
+    private let tokenKey = "authToken"
     
     var token: String? {
-        get {
-            return UserDefaults.standard.string(forKey: tokenKey)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: tokenKey)
-        }
+        get { UserDefaults.standard.string(forKey: tokenKey) }
+        set { UserDefaults.standard.set(newValue, forKey: tokenKey) }
     }
+    
 }
