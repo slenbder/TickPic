@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 protocol AuthViewControllerDelegate: AnyObject {
-    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode: String)
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
 final class AuthViewController: UIViewController {
@@ -17,12 +17,13 @@ final class AuthViewController: UIViewController {
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
-            guard let webViewViewController = segue.destination as? WebViewViewController
-            else { fatalError("Failed to prepare for \(showWebViewSegueIdentifier)") }
-            webViewViewController.delegate = self
+            if let webViewViewController = segue.destination as? WebViewViewController {
+                webViewViewController.delegate = self
+            } else {
+                fatalError("Failed to prepare for \(showWebViewSegueIdentifier)")
+            }
         } else {
             super.prepare(for: segue, sender: sender)
         }
@@ -33,7 +34,10 @@ final class AuthViewController: UIViewController {
             fatalError("No available window to set root view controller")
         }
         
-        let tabBarController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarViewController")
+        guard let tabBarController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
+            fatalError("Failed to instantiate TabBarViewController")
+        }
+        
         window.rootViewController = tabBarController
     }
 }
@@ -55,4 +59,5 @@ extension AuthViewController: WebViewViewControllerDelegate {
         dismiss(animated: true)
     }
 }
+
 

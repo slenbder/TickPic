@@ -1,10 +1,3 @@
-//
-//  WebViewViewController.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 07.05.2024.
-//
-
 import UIKit
 import WebKit
 
@@ -27,14 +20,9 @@ final class WebViewViewController: UIViewController {
         
         webView.navigationDelegate = self
         
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.accessScope)
-        ]
-        let url = urlComponents.url!
+        guard let url = makeAuthorizationURL() else {
+            fatalError("Failed to create URL")
+        }
         
         let request = URLRequest(url: url)
         webView.load(request)
@@ -70,6 +58,19 @@ final class WebViewViewController: UIViewController {
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
     
+    private func makeAuthorizationURL() -> URL? {
+        guard var urlComponents = URLComponents(string: UnsplashAuthorizeURLString) else {
+            print("Failed to create URLComponents")
+            return nil
+        }
+        urlComponents.queryItems = [
+            URLQueryItem(name: "client_id", value: Constants.accessKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "scope", value: Constants.accessScope)
+        ]
+        return urlComponents.url
+    }
 }
 
 extension WebViewViewController: WKNavigationDelegate {
@@ -87,16 +88,16 @@ extension WebViewViewController: WKNavigationDelegate {
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        if
+        guard
             let url = navigationAction.request.url,
-            let urlComponents = URLComponents(string: url.absoluteString),
+            let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
             urlComponents.path == "/oauth/authorize/native",
             let items = urlComponents.queryItems,
             let codeItem = items.first(where: { $0.name == "code" })
-        {
-            return codeItem.value
-        } else {
+        else {
             return nil
         }
+        
+        return codeItem.value
     }
 }
