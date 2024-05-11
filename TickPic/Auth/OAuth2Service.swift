@@ -21,6 +21,7 @@ final class OAuth2Service {
     
     func fetchOAuthToken(with code: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard let request = makeTokenRequest(with: code) else {
+            print("Error: Failed to create token request.")
             let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
             completion(.failure(NetworkError.urlRequestError(error)))
             return
@@ -28,21 +29,25 @@ final class OAuth2Service {
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
+                print("Network request error: \(error)")
                 completion(.failure(NetworkError.urlRequestError(error)))
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
+                print("Error: Failed to get HTTP response.")
                 completion(.failure(NetworkError.urlSessionError))
                 return
             }
             
             guard (200..<300).contains(httpResponse.statusCode) else {
+                print("Unsplash service error: Invalid HTTP status code: \(httpResponse.statusCode)")
                 completion(.failure(NetworkError.httpStatusCode(httpResponse.statusCode)))
                 return
             }
             
             guard let data = data else {
+                print("Error: No data received from server.")
                 completion(.failure(NetworkError.urlSessionError))
                 return
             }
