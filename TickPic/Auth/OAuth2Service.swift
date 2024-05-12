@@ -3,11 +3,12 @@
 //  TickPic
 //
 //  Created by Кирилл Марьясов on 08.05.2024.
-//
+//  Test Mark
 
 import Foundation
 
 final class OAuth2Service {
+    fileprivate let UnsplashTokenURLString = "https://unsplash.com/oauth/token"
     static let shared = OAuth2Service()
     
     let tokenStorage = OAuth2TokenStorage()
@@ -21,27 +22,33 @@ final class OAuth2Service {
     
     func fetchOAuthToken(with code: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard let request = makeTokenRequest(with: code) else {
-            completion(.failure(NetworkError.urlRequestError(NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."]))))
+            print("Error: Failed to create token request.")
+            let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
+            completion(.failure(NetworkError.urlRequestError(error)))
             return
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
+                print("Network request error: \(error)")
                 completion(.failure(NetworkError.urlRequestError(error)))
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
+                print("Error: Failed to get HTTP response.")
                 completion(.failure(NetworkError.urlSessionError))
                 return
             }
             
             guard (200..<300).contains(httpResponse.statusCode) else {
+                print("Unsplash service error: Invalid HTTP status code: \(httpResponse.statusCode)")
                 completion(.failure(NetworkError.httpStatusCode(httpResponse.statusCode)))
                 return
             }
             
             guard let data = data else {
+                print("Error: No data received from server.")
                 completion(.failure(NetworkError.urlSessionError))
                 return
             }
@@ -54,13 +61,17 @@ final class OAuth2Service {
                     completion(.success(accessToken))
                 }
             } catch {
-                completion(.failure(error))
+                print("Error decoding token response: \(error)")
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
             }
         }.resume()
     }
     
     private func makeTokenRequest(with code: String) -> URLRequest? {
-        guard let url = URL(string: "https://unsplash.com/oauth/token") else {
+        guard let url = URL(string: UnsplashTokenURLString) else {
+            print("Error: Failed to create URL for token request")
             return nil
         }
         
@@ -84,6 +95,7 @@ final class OAuth2Service {
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
             return urlRequest
         } catch {
+            print("Error creating token request: \(error)")
             return nil
         }
     }

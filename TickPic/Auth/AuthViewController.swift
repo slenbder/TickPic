@@ -22,12 +22,13 @@ final class AuthViewController: UIViewController {
             if let webViewViewController = segue.destination as? WebViewViewController {
                 webViewViewController.delegate = self
             } else {
-                fatalError("Failed to prepare for \(showWebViewSegueIdentifier)")
+                assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
             }
         } else {
             super.prepare(for: segue, sender: sender)
         }
     }
+    
     
     func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else {
@@ -59,5 +60,6 @@ extension AuthViewController: WebViewViewControllerDelegate {
         dismiss(animated: true)
     }
 }
+
 
 
