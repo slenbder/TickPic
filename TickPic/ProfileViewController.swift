@@ -7,7 +7,10 @@
 
 import UIKit
 
-final class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController {
+    private let profileService = ProfileService()
+    private let tokenStorage = OAuth2TokenStorage()
+
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Userpick")
@@ -18,16 +21,14 @@ final class ProfileViewController: UIViewController {
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.text = "Екатерина Новикова"
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let loginLabel: UILabel = {
+    private let loginNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .gray
-        label.text = "@ekaterina_nov"
         label.font = UIFont.systemFont(ofSize: 13)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -36,16 +37,17 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.text = "Hello, World!"
         label.font = UIFont.systemFont(ofSize: 13)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private lazy var logoutButton: UIButton = {
-        let button = UIButton.systemButton(with: UIImage(named: "Exit Button")!, target: self, action: #selector(didTapLogoutButton))
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "Exit Button"), for: .normal)
         button.tintColor = .red
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
         return button
     }()
     
@@ -54,39 +56,60 @@ final class ProfileViewController: UIViewController {
         
         setupViews()
         setupConstraints()
+
+        guard let token = tokenStorage.token else {
+            print("No token found")
+            return
+        }
+
+        profileService.fetchProfile(token) { [weak self] result in
+            switch result {
+            case .success(let profile):
+                DispatchQueue.main.async {
+                    self?.nameLabel.text = profile.name
+                    self?.loginNameLabel.text = profile.loginName
+                    self?.descriptionLabel.text = profile.bio
+                }
+            case .failure(let error):
+                print("Failed to fetch profile: \(error)")
+            }
+        }
     }
     
     private func setupViews() {
         view.addSubview(profileImageView)
         view.addSubview(nameLabel)
-        view.addSubview(loginLabel)
+        view.addSubview(loginNameLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(logoutButton)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-            profileImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            profileImageView.widthAnchor.constraint(equalToConstant: 70),
-            profileImageView.heightAnchor.constraint(equalToConstant: 70),
+            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            profileImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            profileImageView.widthAnchor.constraint(equalToConstant: 100),
+            profileImageView.heightAnchor.constraint(equalToConstant: 100),
             
             nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
-            nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
-            loginLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
-            loginLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             
-            descriptionLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 8),
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8),
+            descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
-            logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
-            logoutButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor)
+            logoutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            logoutButton.widthAnchor.constraint(equalToConstant: 30),
+            logoutButton.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
+
+
     
-    @objc
-    private func didTapLogoutButton() {
-        
-    }
+    @objc private func didTapLogoutButton() {}
 }
+
