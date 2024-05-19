@@ -10,7 +10,7 @@ import UIKit
 class ProfileViewController: UIViewController {
     private let profileService = ProfileService()
     private let tokenStorage = OAuth2TokenStorage()
-
+    
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Userpick")
@@ -56,12 +56,12 @@ class ProfileViewController: UIViewController {
         
         setupViews()
         setupConstraints()
-
+        
         guard let token = tokenStorage.token else {
             print("No token found")
             return
         }
-
+        
         profileService.fetchProfile(token) { [weak self] result in
             switch result {
             case .success(let profile):
@@ -107,8 +107,8 @@ class ProfileViewController: UIViewController {
             logoutButton.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
-
-
+    
+    
     
     @objc private func didTapLogoutButton() {}
 }
