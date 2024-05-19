@@ -20,7 +20,16 @@ final class OAuth2Service {
         set { tokenStorage.token = newValue }
     }
     
+    private var currentTask: URLSessionDataTask?
+    private var currentCode: String?
+    
     func fetchOAuthToken(with code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        if let currentCode = currentCode, currentCode == code {
+            currentTask?.cancel()
+        } else if currentTask != nil {
+            return
+        }
+        
         guard let request = makeTokenRequest(with: code) else {
             print("Error: Failed to create token request.")
             let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
@@ -28,7 +37,15 @@ final class OAuth2Service {
             return
         }
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        currentCode = code
+        currentTask = URLSession.shared.dataTask(with: request) { data, response, error in
+            self.currentTask = nil
+            self.currentCode = nil
+            
+            if let error = error as? URLError, error.code == .cancelled {
+                return
+            }
+            
             if let error = error {
                 print("Network request error: \(error)")
                 completion(.failure(NetworkError.urlRequestError(error)))
@@ -66,7 +83,8 @@ final class OAuth2Service {
                     completion(.failure(error))
                 }
             }
-        }.resume()
+        }
+        currentTask?.resume()
     }
     
     private func makeTokenRequest(with code: String) -> URLRequest? {

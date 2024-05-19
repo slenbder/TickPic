@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F3916142BF8ACC50003624E /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3916132BF8ACC50003624E /* UIBlockingProgressHUD.swift */; };
 		4F41005E2BE696B400473381 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F41005D2BE696B400473381 /* Constants.swift */; };
 		4F4333C02BEA575D001C92B4 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4333BF2BEA575D001C92B4 /* AuthViewController.swift */; };
 		4F4333C32BEA621D001C92B4 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4333C22BEA621D001C92B4 /* WebViewViewController.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F3916132BF8ACC50003624E /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		4F41005D2BE696B400473381 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4F4333BF2BEA575D001C92B4 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		4F4333C22BEA621D001C92B4 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				4F6CEFCB2BD544F1004ECE99 /* SingleImageViewController.swift */,
 				4F41005D2BE696B400473381 /* Constants.swift */,
 				4F4333CC2BEBAAB6001C92B4 /* SplashViewController.swift */,
+				4F3916132BF8ACC50003624E /* UIBlockingProgressHUD.swift */,
 			);
 			path = TickPic;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 				4F4333CD2BEBAAB6001C92B4 /* SplashViewController.swift in Sources */,
 				4F4333C02BEA575D001C92B4 /* AuthViewController.swift in Sources */,
 				4F41005E2BE696B400473381 /* Constants.swift in Sources */,
+				4F3916142BF8ACC50003624E /* UIBlockingProgressHUD.swift in Sources */,
 				4F6CEFCC2BD544F1004ECE99 /* SingleImageViewController.swift in Sources */,
 				4F4333C72BEB9086001C92B4 /* URLSession+data.swift in Sources */,
 				4F4333C32BEA621D001C92B4 /* WebViewViewController.swift in Sources */,
