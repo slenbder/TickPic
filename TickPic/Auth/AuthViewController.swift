@@ -17,6 +17,7 @@ final class AuthViewController: UIViewController {
     weak var delegate: AuthViewControllerDelegate?
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
+    private let profileService = ProfileService.shared // Используем синглтон
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
@@ -29,7 +30,6 @@ final class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    
     
     func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else {
@@ -51,8 +51,16 @@ extension AuthViewController: WebViewViewControllerDelegate {
             ProgressHUD.dismiss()
             switch result {
             case .success(let accessToken):
-                print("Access token obtained: \(accessToken)")
-                self?.switchToTabBarController()
+                self?.profileService.fetchProfile(accessToken) { profileResult in
+                    switch profileResult {
+                    case .success:
+                        DispatchQueue.main.async {
+                            self?.switchToTabBarController()
+                        }
+                    case .failure(let error):
+                        print("Failed to fetch profile: \(error)")
+                    }
+                }
             case .failure(let error):
                 print("Failed to obtain access token: \(error)")
             }

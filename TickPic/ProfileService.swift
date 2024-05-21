@@ -1,10 +1,21 @@
-import Foundation
+//
+//  ProfileService.swift
+//  TickPic
+//
+//  Created by Кирилл Марьясов on 18.05.2024.
+//
 
 import Foundation
 
 final class ProfileService {
+    static let shared = ProfileService() // Синглтон
+
+    private init() {} // Закрытый инициализатор для предотвращения создания новых экземпляров
+
     private let semaphore = DispatchSemaphore(value: 1)
-    
+    private(set) var currentProfile: Profile?
+    private(set) var profile: Profile? // Добавлено свойство
+
     struct ProfileResult: Codable {
         let id: String
         let updatedAt: String
@@ -90,7 +101,7 @@ final class ProfileService {
         semaphore.wait()
         defer { semaphore.signal() }
         
-        let url = URL(string: "https://api.unsplash.com/me")! // Замени на реальный URL
+        let url = URL(string: "https://api.unsplash.com/me")!
         let request = makeRequest(url: url, bearerToken: token)
         
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -107,6 +118,8 @@ final class ProfileService {
             do {
                 let profileResult = try JSONDecoder().decode(ProfileResult.self, from: data)
                 let profile = Profile(username: profileResult.username, firstName: profileResult.firstName, lastName: profileResult.lastName, bio: profileResult.bio)
+                self.currentProfile = profile // Сохранение текущего профиля
+                self.profile = profile // Сохранение профиля
                 completion(.success(profile))
             } catch {
                 completion(.failure(error))

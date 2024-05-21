@@ -2,13 +2,13 @@
 //  ProfileViewController.swift
 //  TickPic
 //
-//  Created by Кирилл Марьясов on 17.04.2024.
+//  Created by Кирилл Марьясов on 07.05.2024.
 //
 
 import UIKit
 
 class ProfileViewController: UIViewController {
-    private let profileService = ProfileService()
+    private let profileService = ProfileService.shared // Используем синглтон
     private let tokenStorage = OAuth2TokenStorage()
     
     private lazy var profileImageView: UIImageView = {
@@ -57,23 +57,18 @@ class ProfileViewController: UIViewController {
         setupViews()
         setupConstraints()
         
-        guard let token = tokenStorage.token else {
-            print("No token found")
-            return
+        // Считывание значений для nameLabel, loginNameLabel, и descriptionLabel
+        if let profile = profileService.profile {
+            updateProfileDetails(profile: profile)
+        } else {
+            print("Profile not found")
         }
-        
-        profileService.fetchProfile(token) { [weak self] result in
-            switch result {
-            case .success(let profile):
-                DispatchQueue.main.async {
-                    self?.nameLabel.text = profile.name
-                    self?.loginNameLabel.text = profile.loginName
-                    self?.descriptionLabel.text = profile.bio
-                }
-            case .failure(let error):
-                print("Failed to fetch profile: \(error)")
-            }
-        }
+    }
+    
+    private func updateProfileDetails(profile: ProfileService.Profile) {
+        nameLabel.text = profile.name
+        loginNameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
     }
     
     private func setupViews() {
@@ -108,8 +103,5 @@ class ProfileViewController: UIViewController {
         ])
     }
     
-    
-    
     @objc private func didTapLogoutButton() {}
 }
-

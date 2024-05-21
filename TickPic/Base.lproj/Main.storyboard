@@ -3,7 +3,7 @@
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="5120" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -269,8 +269,21 @@
                     <view key="view" contentMode="scaleToFill" id="adE-SK-vyE">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="Gjn-No-BF3">
+                                <rect key="frame" x="178.66666666666666" y="441" width="72.666666666666657" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75.109999999999999" id="BbU-cF-Gyt"/>
+                                    <constraint firstAttribute="width" constant="72.519999999999996" id="uO1-8u-NHx"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Llz-WR-dvk"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="ypBlack"/>
+                        <constraints>
+                            <constraint firstItem="Gjn-No-BF3" firstAttribute="centerY" secondItem="Llz-WR-dvk" secondAttribute="centerY" id="4tk-mA-8UO"/>
+                            <constraint firstItem="Gjn-No-BF3" firstAttribute="centerX" secondItem="Llz-WR-dvk" secondAttribute="centerX" id="xZn-Po-75V"/>
+                        </constraints>
                     </view>
                     <connections>
                         <segue destination="Olm-xO-ttd" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" id="s3C-s6-yvz"/>
@@ -344,6 +357,7 @@
         <image name="1" width="985" height="1280"/>
         <image name="Backward" width="24" height="24"/>
         <image name="Sharing" width="51" height="51"/>
+        <image name="Vector" width="413" height="427.66665649414062"/>
         <image name="auth_screen_logo" width="60" height="60"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="nav_back_button" width="24" height="24"/>
