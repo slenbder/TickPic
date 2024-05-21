@@ -8,14 +8,14 @@
 import Foundation
 
 final class ProfileService {
-    static let shared = ProfileService() // Синглтон
-
-    private init() {} // Закрытый инициализатор для предотвращения создания новых экземпляров
-
+    static let shared = ProfileService()
+    
+    private init() {}
+    
     private let semaphore = DispatchSemaphore(value: 1)
     private(set) var currentProfile: Profile?
-    private(set) var profile: Profile? // Добавлено свойство
-
+    private(set) var profile: Profile?
+    
     struct ProfileResult: Codable {
         let id: String
         let updatedAt: String
@@ -118,8 +118,8 @@ final class ProfileService {
             do {
                 let profileResult = try JSONDecoder().decode(ProfileResult.self, from: data)
                 let profile = Profile(username: profileResult.username, firstName: profileResult.firstName, lastName: profileResult.lastName, bio: profileResult.bio)
-                self.currentProfile = profile // Сохранение текущего профиля
-                self.profile = profile // Сохранение профиля
+                self.currentProfile = profile
+                self.profile = profile
                 completion(.success(profile))
             } catch {
                 completion(.failure(error))

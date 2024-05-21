@@ -8,7 +8,7 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-    private let profileService = ProfileService.shared // Используем синглтон
+    private let profileService = ProfileService.shared
     private let tokenStorage = OAuth2TokenStorage()
     
     private lazy var profileImageView: UIImageView = {
@@ -57,7 +57,6 @@ class ProfileViewController: UIViewController {
         setupViews()
         setupConstraints()
         
-        // Считывание значений для nameLabel, loginNameLabel, и descriptionLabel
         if let profile = profileService.profile {
             updateProfileDetails(profile: profile)
         } else {

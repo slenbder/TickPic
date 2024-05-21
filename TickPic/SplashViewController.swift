@@ -11,13 +11,13 @@ import WebKit
 final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
-    private let profileService = ProfileService.shared // Используем синглтон
-
+    private let profileService = ProfileService.shared
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if let token = oauth2TokenStorage.token {
-            fetchProfile(token) // Вызов fetchProfile, если токен уже присутствует
+            fetchProfile(token)
         } else {
             performSegue(withIdentifier: "ShowAuthenticationScreen", sender: nil)
         }
@@ -42,8 +42,7 @@ final class SplashViewController: UIViewController {
             }
         }
     }
-
-    // Новый метод для загрузки профиля
+    
     private func fetchProfile(_ token: String) {
         profileService.fetchProfile(token) { [weak self] result in
             switch result {
@@ -68,7 +67,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             switch result {
             case .success(let accessToken):
                 self?.oauth2TokenStorage.token = accessToken
-                self?.fetchProfile(accessToken) // Вызов fetchProfile после получения токена
+                self?.fetchProfile(accessToken)
             case .failure(let error):
                 print("Error fetching OAuth2 token: \(error)")
             }
