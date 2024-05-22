@@ -65,19 +65,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4F4333C12BEA57AE001C92B4 /* Auth */ = {
-			isa = PBXGroup;
-			children = (
-				4F4333BF2BEA575D001C92B4 /* AuthViewController.swift */,
-				4F4333C22BEA621D001C92B4 /* WebViewViewController.swift */,
-				4F4333C42BEB8CD8001C92B4 /* OAuth2Service.swift */,
-				4F4333C62BEB9086001C92B4 /* URLSession+data.swift */,
-				4F4333C82BEB91AE001C92B4 /* OAuthTokenResponseBody.swift */,
-				4F4333CA2BEB9345001C92B4 /* OAuth2TokenStorage.swift */,
-			);
-			path = Auth;
-			sourceTree = "<group>";
-		};
 		4F4C7ED22BBEFA8E00F8E8BA = {
 			isa = PBXGroup;
 			children = (
@@ -97,31 +84,60 @@
 		4F4C7EDD2BBEFA8E00F8E8BA /* TickPic */ = {
 			isa = PBXGroup;
 			children = (
-				4F4333C12BEA57AE001C92B4 /* Auth */,
-				4F4C7EDE2BBEFA8E00F8E8BA /* AppDelegate.swift */,
-				4F4C7EE02BBEFA8E00F8E8BA /* SceneDelegate.swift */,
-				4FC87F122BC70891009E0409 /* ImagesList */,
+				4F9833862BFDFFA90019EA4A /* Controllers */,
+				4F9833872BFDFFC00019EA4A /* Services */,
+				4F9833882BFDFFCA0019EA4A /* Views */,
+				4F9833892BFDFFD40019EA4A /* Utilities */,
 				4F4C7EE42BBEFA8E00F8E8BA /* Main.storyboard */,
-				4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */,
 				4F4C7EE72BBEFA8F00F8E8BA /* Assets.xcassets */,
 				4F4C7EE92BBEFA8F00F8E8BA /* LaunchScreen.storyboard */,
 				4F4C7EEC2BBEFA8F00F8E8BA /* Info.plist */,
-				4F6CEFCB2BD544F1004ECE99 /* SingleImageViewController.swift */,
-				4F41005D2BE696B400473381 /* Constants.swift */,
-				4F4333CC2BEBAAB6001C92B4 /* SplashViewController.swift */,
-				4F3916132BF8ACC50003624E /* UIBlockingProgressHUD.swift */,
-				4F3916152BF9EE500003624E /* ProfileService.swift */,
 			);
 			path = TickPic;
 			sourceTree = "<group>";
 		};
-		4FC87F122BC70891009E0409 /* ImagesList */ = {
+		4F9833862BFDFFA90019EA4A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4F6CEFCB2BD544F1004ECE99 /* SingleImageViewController.swift */,
+				4F4333C22BEA621D001C92B4 /* WebViewViewController.swift */,
+				4F4333BF2BEA575D001C92B4 /* AuthViewController.swift */,
+				4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */,
 				4F4C7EE22BBEFA8E00F8E8BA /* ImagesListViewController.swift */,
+				4F4333CC2BEBAAB6001C92B4 /* SplashViewController.swift */,
+				4F4C7EDE2BBEFA8E00F8E8BA /* AppDelegate.swift */,
+				4F4C7EE02BBEFA8E00F8E8BA /* SceneDelegate.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		4F9833872BFDFFC00019EA4A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4F3916152BF9EE500003624E /* ProfileService.swift */,
+				4F4333C62BEB9086001C92B4 /* URLSession+data.swift */,
+				4F4333C42BEB8CD8001C92B4 /* OAuth2Service.swift */,
+				4F4333C82BEB91AE001C92B4 /* OAuthTokenResponseBody.swift */,
+				4F4333CA2BEB9345001C92B4 /* OAuth2TokenStorage.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4F9833882BFDFFCA0019EA4A /* Views */ = {
+			isa = PBXGroup;
+			children = (
 				4FC87F132BC708D1009E0409 /* ImagesListCell.swift */,
 			);
-			path = ImagesList;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4F9833892BFDFFD40019EA4A /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				4F3916132BF8ACC50003624E /* UIBlockingProgressHUD.swift */,
+				4F41005D2BE696B400473381 /* Constants.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
