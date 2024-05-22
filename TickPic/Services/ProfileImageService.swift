@@ -22,6 +22,7 @@ final class ProfileImageService {
     }
 
     static let shared = ProfileImageService()
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
 
     private init() {}
 
@@ -67,6 +68,12 @@ final class ProfileImageService {
                 let profileImageURL = userResult.profileImage.small
                 self.avatarURL = profileImageURL
                 completion(.success(profileImageURL))
+                
+                NotificationCenter.default.post(
+                    name: ProfileImageService.didChangeNotification,
+                    object: self,
+                    userInfo: ["URL": profileImageURL]
+                )
             } catch {
                 completion(.failure(error))
             }
