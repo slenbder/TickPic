@@ -17,62 +17,18 @@ final class ProfileService {
     private(set) var profile: Profile?
     
     struct ProfileResult: Codable {
-        let id: String
-        let updatedAt: String
+        
         let username: String
         let firstName: String
         let lastName: String?
-        let twitterUsername: String?
-        let portfolioURL: String?
         let bio: String?
-        let location: String?
-        let totalLikes: Int
-        let totalPhotos: Int
-        let totalCollections: Int
-        let profileImage: ProfileImage
-        let links: Links
         
         enum CodingKeys: String, CodingKey {
-            case id
-            case updatedAt = "updated_at"
+            
             case username
             case firstName = "first_name"
             case lastName = "last_name"
-            case twitterUsername = "twitter_username"
-            case portfolioURL = "portfolio_url"
             case bio
-            case location
-            case totalLikes = "total_likes"
-            case totalPhotos = "total_photos"
-            case totalCollections = "total_collections"
-            case profileImage = "profile_image"
-            case links
-        }
-    }
-    
-    struct ProfileImage: Codable {
-        let small: String
-        let medium: String
-        let large: String
-    }
-    
-    struct Links: Codable {
-        let selfLink: String
-        let html: String
-        let photos: String
-        let likes: String
-        let portfolio: String
-        let following: String
-        let followers: String
-        
-        enum CodingKeys: String, CodingKey {
-            case selfLink = "self"
-            case html
-            case photos
-            case likes
-            case portfolio
-            case following
-            case followers
         }
     }
     
