@@ -31,8 +31,8 @@ final class OAuth2Service {
         }
         
         guard let request = makeTokenRequest(with: code) else {
-            print("Error: Failed to create token request.")
             let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
+            print("[fetchOAuthToken]: NetworkError - Failed to create token request with code: \(code)")
             completion(.failure(NetworkError.urlRequestError(error)))
             return
         }
@@ -50,7 +50,7 @@ final class OAuth2Service {
                     completion(.success(accessToken))
                 }
             case .failure(let error):
-                print("Network request error: \(error)")
+                print("[fetchOAuthToken]: NetworkError - \(error.localizedDescription) for code: \(code)")
                 DispatchQueue.main.async {
                     completion(.failure(error))
                 }
@@ -61,7 +61,7 @@ final class OAuth2Service {
     
     private func makeTokenRequest(with code: String) -> URLRequest? {
         guard let url = URL(string: UnsplashTokenURLString) else {
-            print("Error: Failed to create URL for token request")
+            print("[makeTokenRequest]: NetworkError - Failed to create URL for token request")
             return nil
         }
         
@@ -85,7 +85,7 @@ final class OAuth2Service {
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
             return urlRequest
         } catch {
-            print("Error creating token request: \(error)")
+            print("[makeTokenRequest]: NetworkError - Error creating token request: \(error.localizedDescription)")
             return nil
         }
     }

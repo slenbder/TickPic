@@ -39,13 +39,17 @@ final class ProfileImageService {
 
         let tokenStorage = OAuth2TokenStorage()
         guard let token = tokenStorage.token else {
-            completion(.failure(NSError(domain: "No token found", code: 0, userInfo: nil)))
+            let error = NSError(domain: "ProfileImageService", code: 0, userInfo: [NSLocalizedDescriptionKey: "No token found"])
+            print("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription), Username: \(username)")
+            completion(.failure(error))
             return
         }
 
         let urlString = "https://api.unsplash.com/users/\(username)"
         guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+            let error = NSError(domain: "ProfileImageService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            print("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription), URL: \(urlString)")
+            completion(.failure(error))
             return
         }
 
@@ -65,6 +69,7 @@ final class ProfileImageService {
                     userInfo: ["URL": profileImageURL]
                 )
             case .failure(let error):
+                print("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription), Username: \(username)")
                 completion(.failure(error))
             }
         }

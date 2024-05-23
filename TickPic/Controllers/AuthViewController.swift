@@ -42,6 +42,16 @@ final class AuthViewController: UIViewController {
         
         window.rootViewController = tabBarController
     }
+    
+    private func showErrorAlert() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Ок", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
@@ -59,10 +69,16 @@ extension AuthViewController: WebViewViewControllerDelegate {
                         }
                     case .failure(let error):
                         print("Failed to fetch profile: \(error)")
+                        DispatchQueue.main.async {
+                            self?.showErrorAlert()
+                        }
                     }
                 }
             case .failure(let error):
                 print("Failed to obtain access token: \(error)")
+                DispatchQueue.main.async {
+                    self?.showErrorAlert()
+                }
             }
         }
     }

@@ -66,6 +66,7 @@ final class ProfileService {
                 self.profile = profile
                 completion(.success(profile))
             case .failure(let error):
+                print("[fetchProfile]: NetworkError - \(error.localizedDescription), Token: \(token)")
                 completion(.failure(error))
             }
         }.resume()
