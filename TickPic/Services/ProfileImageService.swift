@@ -27,7 +27,7 @@ final class ProfileImageService {
     private init() {}
 
     private let semaphore = DispatchSemaphore(value: 1)
-    private var currentTask: URLSessionDataTask?
+    private var currentTask: URLSessionTask?
 
     private(set) var avatarURL: String?
 
@@ -52,19 +52,9 @@ final class ProfileImageService {
         var request = URLRequest(url: url)
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
-        currentTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            guard let data = data else {
-                completion(.failure(NSError(domain: "No data returned", code: 0, userInfo: nil)))
-                return
-            }
-
-            do {
-                let userResult = try JSONDecoder().decode(UserResult.self, from: data)
+        currentTask = URLSession.shared.objectTask(for: request) { (result: Result<UserResult, Error>) in
+            switch result {
+            case .success(let userResult):
                 let profileImageURL = userResult.profileImage.small
                 self.avatarURL = profileImageURL
                 completion(.success(profileImageURL))
@@ -74,7 +64,7 @@ final class ProfileImageService {
                     object: self,
                     userInfo: ["URL": profileImageURL]
                 )
-            } catch {
+            case .failure(let error):
                 completion(.failure(error))
             }
         }

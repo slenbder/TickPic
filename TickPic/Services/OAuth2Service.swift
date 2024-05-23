@@ -15,12 +15,12 @@ final class OAuth2Service {
     
     private init() {}
     
-    private (set) var authToken: String? {
+    private(set) var authToken: String? {
         get { tokenStorage.token }
         set { tokenStorage.token = newValue }
     }
     
-    private var currentTask: URLSessionDataTask?
+    private var currentTask: URLSessionTask?
     private var currentCode: String?
     
     func fetchOAuthToken(with code: String, completion: @escaping (Result<String, Error>) -> Void) {
@@ -38,47 +38,19 @@ final class OAuth2Service {
         }
         
         currentCode = code
-        currentTask = URLSession.shared.dataTask(with: request) { data, response, error in
+        currentTask = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
             self.currentTask = nil
             self.currentCode = nil
             
-            if let error = error as? URLError, error.code == .cancelled {
-                return
-            }
-            
-            if let error = error {
-                print("Network request error: \(error)")
-                completion(.failure(NetworkError.urlRequestError(error)))
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("Error: Failed to get HTTP response.")
-                completion(.failure(NetworkError.urlSessionError))
-                return
-            }
-            
-            guard (200..<300).contains(httpResponse.statusCode) else {
-                print("Unsplash service error: Invalid HTTP status code: \(httpResponse.statusCode)")
-                completion(.failure(NetworkError.httpStatusCode(httpResponse.statusCode)))
-                return
-            }
-            
-            guard let data = data else {
-                print("Error: No data received from server.")
-                completion(.failure(NetworkError.urlSessionError))
-                return
-            }
-            
-            do {
-                let tokenResponse = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
+            switch result {
+            case .success(let tokenResponse):
                 let accessToken = tokenResponse.accessToken
                 self.tokenStorage.token = accessToken
                 DispatchQueue.main.async {
                     completion(.success(accessToken))
                 }
-            } catch {
-                print("Error decoding token response: \(error)")
+            case .failure(let error):
+                print("Network request error: \(error)")
                 DispatchQueue.main.async {
                     completion(.failure(error))
                 }

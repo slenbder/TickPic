@@ -17,14 +17,12 @@ final class ProfileService {
     private(set) var profile: Profile?
     
     struct ProfileResult: Codable {
-        
         let username: String
         let firstName: String
         let lastName: String?
         let bio: String?
         
         enum CodingKeys: String, CodingKey {
-            
             case username
             case firstName = "first_name"
             case lastName = "last_name"
@@ -60,24 +58,14 @@ final class ProfileService {
         let url = URL(string: "https://api.unsplash.com/me")!
         let request = makeRequest(url: url, bearerToken: token)
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(NSError(domain: "com.unsplash", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data returned"])))
-                return
-            }
-            
-            do {
-                let profileResult = try JSONDecoder().decode(ProfileResult.self, from: data)
+        URLSession.shared.objectTask(for: request) { (result: Result<ProfileResult, Error>) in
+            switch result {
+            case .success(let profileResult):
                 let profile = Profile(username: profileResult.username, firstName: profileResult.firstName, lastName: profileResult.lastName, bio: profileResult.bio)
                 self.currentProfile = profile
                 self.profile = profile
                 completion(.success(profile))
-            } catch {
+            case .failure(let error):
                 completion(.failure(error))
             }
         }.resume()
