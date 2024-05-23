@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import WebKit
 
 final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service.shared
@@ -14,13 +13,36 @@ final class SplashViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
 
+    private let splashScreenLogo: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "Vector"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(named: "ypBlack") // Используйте цвет фона "ypBlack"
+        view.addSubview(splashScreenLogo)
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            splashScreenLogo.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            splashScreenLogo.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            splashScreenLogo.widthAnchor.constraint(equalToConstant: 72.52),
+            splashScreenLogo.heightAnchor.constraint(equalToConstant: 75.11)
+        ])
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if let token = oauth2TokenStorage.token {
             fetchProfile(token)
         } else {
-            performSegue(withIdentifier: "ShowAuthenticationScreen", sender: nil)
+            presentAuthViewController()
         }
     }
     
@@ -32,16 +54,15 @@ final class SplashViewController: UIViewController {
             window.rootViewController = tabBarController
         }
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowAuthenticationScreen" {
-            guard let navigationController = segue.destination as? UINavigationController else {
-                fatalError("Failed to prepare for ShowAuthenticationScreen")
-            }
-            if let viewController = navigationController.viewControllers.first as? AuthViewController {
-                viewController.delegate = self
-            }
+
+    private func presentAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+            fatalError("Failed to instantiate AuthViewController")
         }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated: true, completion: nil)
     }
 
     private func fetchProfile(_ token: String) {

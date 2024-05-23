@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YJd-2M-alO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="5120" identifier="iOS"/>
@@ -172,20 +172,20 @@
         <!--Auth View Controller-->
         <scene sceneID="Vta-4Y-XXZ">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="Pwf-gh-a2P" customClass="AuthViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AuthViewController" modalPresentationStyle="fullScreen" id="Pwf-gh-a2P" customClass="AuthViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Rvd-I1-sLm">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="auth_screen_logo" translatesAutoresizingMaskIntoConstraints="NO" id="nJR-FF-pYs">
-                                <rect key="frame" x="185" y="458" width="60" height="60"/>
+                                <rect key="frame" x="185" y="470.66666666666669" width="60" height="60.000000000000057"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="bdZ-gg-Y3Y"/>
                                     <constraint firstAttribute="width" constant="60" id="gUh-Co-w3t"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZIF-93-iO3">
-                                <rect key="frame" x="16" y="760" width="398" height="48"/>
+                                <rect key="frame" x="16" y="726" width="398" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="dGa-OO-0Gb"/>
                                 </constraints>
@@ -228,7 +228,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lOl-fI-Fec">
-                                <rect key="frame" x="0.0" y="44" width="430" height="888"/>
+                                <rect key="frame" x="0.0" y="103" width="430" height="829"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -236,7 +236,7 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="zIG-gU-dup">
-                                <rect key="frame" x="0.0" y="44" width="430" height="4"/>
+                                <rect key="frame" x="0.0" y="103" width="430" height="4"/>
                                 <color key="tintColor" name="ypBlack"/>
                             </progressView>
                         </subviews>
@@ -261,37 +261,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ew0-li-FKW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2438" y="-731"/>
-        </scene>
-        <!--Splash View Controller-->
-        <scene sceneID="tOm-oe-Dsx">
-            <objects>
-                <viewController storyboardIdentifier="SplashViewController" modalPresentationStyle="fullScreen" id="YJd-2M-alO" userLabel="Splash View Controller" customClass="SplashViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="adE-SK-vyE">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="Gjn-No-BF3">
-                                <rect key="frame" x="178.66666666666666" y="441" width="72.666666666666657" height="75"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="75.109999999999999" id="BbU-cF-Gyt"/>
-                                    <constraint firstAttribute="width" constant="72.519999999999996" id="uO1-8u-NHx"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="Llz-WR-dvk"/>
-                        <color key="backgroundColor" name="ypBlack"/>
-                        <constraints>
-                            <constraint firstItem="Gjn-No-BF3" firstAttribute="centerY" secondItem="Llz-WR-dvk" secondAttribute="centerY" id="4tk-mA-8UO"/>
-                            <constraint firstItem="Gjn-No-BF3" firstAttribute="centerX" secondItem="Llz-WR-dvk" secondAttribute="centerX" id="xZn-Po-75V"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <segue destination="Olm-xO-ttd" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" id="s3C-s6-yvz"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="epH-RY-xnR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-54" y="-167"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="xSp-YN-Ew0">
@@ -318,7 +287,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="EAz-Bl-ZB4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="nav_back_button" id="3jK-ek-aLw">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="44"/>
+                        <rect key="frame" x="0.0" y="59" width="430" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="YP Black"/>
                     </navigationBar>
@@ -337,7 +306,6 @@
         <image name="1" width="985" height="1280"/>
         <image name="Backward" width="24" height="24"/>
         <image name="Sharing" width="51" height="51"/>
-        <image name="Vector" width="413" height="427.66665649414062"/>
         <image name="auth_screen_logo" width="60" height="60"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="nav_back_button" width="24" height="24"/>
