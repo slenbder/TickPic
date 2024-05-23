@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
@@ -129,12 +130,6 @@ class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else { return }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data, let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.profileImageView.image = image
-                }
-            }
-        }.resume()
+        profileImageView.kf.setImage(with: url)
     }
 }
