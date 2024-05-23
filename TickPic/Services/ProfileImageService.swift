@@ -18,7 +18,7 @@ final class ProfileImageService {
     }
     
     struct ProfileImage: Codable {
-        let small: String
+        let large: String
     }
     
     static let shared = ProfileImageService()
@@ -59,7 +59,7 @@ final class ProfileImageService {
         currentTask = URLSession.shared.objectTask(for: request) { (result: Result<UserResult, Error>) in
             switch result {
             case .success(let userResult):
-                let profileImageURL = userResult.profileImage.small
+                let profileImageURL = userResult.profileImage.large
                 self.avatarURL = profileImageURL
                 completion(.success(profileImageURL))
                 

@@ -42,7 +42,7 @@ final class AuthViewController: UIViewController {
         
         window.rootViewController = tabBarController
     }
-    
+
     private func showErrorAlert() {
         let alert = UIAlertController(
             title: "Что-то пошло не так(",
@@ -64,8 +64,10 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 self?.profileService.fetchProfile(accessToken) { profileResult in
                     switch profileResult {
                     case .success:
-                        DispatchQueue.main.async {
-                            self?.switchToTabBarController()
+                        ProfileImageService.shared.fetchProfileImageURL(username: self?.profileService.profile?.username ?? "") { _ in
+                            DispatchQueue.main.async {
+                                self?.switchToTabBarController()
+                            }
                         }
                     case .failure(let error):
                         print("Failed to fetch profile: \(error)")

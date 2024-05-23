@@ -17,6 +17,8 @@ class ProfileViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Userpick")
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
         return imageView
     }()
     
@@ -56,6 +58,8 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = .ypBlack
+        
         setupViews()
         setupConstraints()
         
@@ -75,6 +79,11 @@ class ProfileViewController: UIViewController {
             }
         
         updateAvatar()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
     }
     
     private func updateProfileDetails(profile: ProfileService.Profile) {
@@ -116,6 +125,7 @@ class ProfileViewController: UIViewController {
     }
     
     @objc private func didTapLogoutButton() {
+        // Handle logout
     }
     
     deinit {
