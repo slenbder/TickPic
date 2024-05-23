@@ -28,7 +28,7 @@ final class SplashViewController: UIViewController {
         DispatchQueue.main.async {
             guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
             let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-                .instantiateViewController(withIdentifier: "TabBarViewController")
+                .instantiateViewController(withIdentifier: "TabBarController")
             window.rootViewController = tabBarController
         }
     }

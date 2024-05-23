@@ -36,8 +36,8 @@ final class AuthViewController: UIViewController {
             fatalError("No available window to set root view controller")
         }
         
-        guard let tabBarController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
-            fatalError("Failed to instantiate TabBarViewController")
+        guard let tabBarController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarController") as? UITabBarController else {
+            fatalError("Failed to instantiate TabBarController")
         }
         
         window.rootViewController = tabBarController
