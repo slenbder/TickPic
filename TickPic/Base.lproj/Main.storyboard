@@ -311,22 +311,6 @@
             </objects>
             <point key="canvasLocation" x="820" y="338"/>
         </scene>
-        <!--Profile View Controller-->
-        <scene sceneID="Baa-st-5CK">
-            <objects>
-                <viewController storyboardIdentifier="ProfileViewController" id="Uvc-AT-IWI" customClass="ProfileViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" restorationIdentifier="ProfileViewController" id="3PM-db-FAd" customClass="Profile" customModule="TickPic" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="bqE-d3-3Kj"/>
-                        <color key="backgroundColor" name="YP Black"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="C4o-tW-8TB"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Hhm-UW-Pgz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1646.5116279069766" y="654.72103004291853"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="SZ1-ne-r4Y">
             <objects>
@@ -358,7 +342,6 @@
         <image name="like_button_on" width="42" height="42"/>
         <image name="nav_back_button" width="24" height="24"/>
         <image name="tab_editorial_active" width="30.333333969116211" height="30"/>
-        <image name="tab_profile_active" width="30.333333969116211" height="30"/>
         <namedColor name="YP Black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
