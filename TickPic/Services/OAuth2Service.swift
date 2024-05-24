@@ -22,46 +22,53 @@ final class OAuth2Service {
     
     private var currentTask: URLSessionTask?
     private var currentCode: String?
+    private let queue = DispatchQueue(label: "OAuth2ServiceQueue", attributes: .concurrent)
+    private let semaphore = DispatchSemaphore(value: 1)
     
     func fetchOAuthToken(with code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        if let currentCode = currentCode, currentCode == code {
-            currentTask?.cancel()
-        } else if currentTask != nil {
-            return
-        }
-        
-        guard let request = makeTokenRequest(with: code) else {
-            let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
-            print("[fetchOAuthToken]: NetworkError - Failed to create token request with code: \(code)")
-            completion(.failure(NetworkError.urlRequestError(error)))
-            return
-        }
-        
-        currentCode = code
-        currentTask = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
-            self.currentTask = nil
-            self.currentCode = nil
+        queue.async(flags: .barrier) {
+            if let currentCode = self.currentCode, currentCode == code {
+                self.currentTask?.cancel()
+            } else if self.currentTask != nil {
+                completion(.failure(NetworkError.urlSessionError))
+                return
+            }
             
-            switch result {
-            case .success(let tokenResponse):
-                let accessToken = tokenResponse.accessToken
-                self.tokenStorage.token = accessToken
-                DispatchQueue.main.async {
-                    completion(.success(accessToken))
-                }
-            case .failure(let error):
-                print("[fetchOAuthToken]: NetworkError - \(error.localizedDescription) for code: \(code)")
-                DispatchQueue.main.async {
-                    completion(.failure(error))
+            guard let request = self.makeTokenRequest(with: code) else {
+                print("Error: Failed to create token request.")
+                let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
+                completion(.failure(NetworkError.urlRequestError(error)))
+                return
+            }
+            
+            self.currentCode = code
+            self.semaphore.wait()
+            self.currentTask = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
+                self.currentTask = nil
+                self.currentCode = nil
+                self.semaphore.signal()
+                
+                switch result {
+                case .success(let tokenResponse):
+                    let accessToken = tokenResponse.accessToken
+                    self.tokenStorage.token = accessToken
+                    DispatchQueue.main.async {
+                        completion(.success(accessToken))
+                    }
+                case .failure(let error):
+                    print("Network request error: \(error)")
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
                 }
             }
+            self.currentTask?.resume()
         }
-        currentTask?.resume()
     }
     
     private func makeTokenRequest(with code: String) -> URLRequest? {
         guard let url = URL(string: UnsplashTokenURLString) else {
-            print("[makeTokenRequest]: NetworkError - Failed to create URL for token request")
+            print("Error: Failed to create URL for token request")
             return nil
         }
         
@@ -85,7 +92,7 @@ final class OAuth2Service {
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
             return urlRequest
         } catch {
-            print("[makeTokenRequest]: NetworkError - Error creating token request: \(error.localizedDescription)")
+            print("Error creating token request: \(error)")
             return nil
         }
     }
