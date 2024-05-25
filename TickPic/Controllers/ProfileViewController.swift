@@ -86,11 +86,11 @@ class ProfileViewController: UIViewController {
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
     }
     
-    private func updateProfileDetails(profile: ProfileService.Profile) {
-        nameLabel.text = profile.name
-        loginNameLabel.text = profile.loginName
-        descriptionLabel.text = profile.bio
-    }
+    private func updateProfileDetails(profile: Profile) {
+            nameLabel.text = profile.name
+            loginNameLabel.text = profile.loginName
+            descriptionLabel.text = profile.bio
+        }
     
     private func setupViews() {
         view.addSubview(profileImageView)

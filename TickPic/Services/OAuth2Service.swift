@@ -8,7 +8,6 @@
 import Foundation
 
 final class OAuth2Service {
-    fileprivate let UnsplashTokenURLString = "https://unsplash.com/oauth/token"
     static let shared = OAuth2Service()
     
     let tokenStorage = OAuth2TokenStorage()
@@ -22,52 +21,46 @@ final class OAuth2Service {
     
     private var currentTask: URLSessionTask?
     private var currentCode: String?
-    private let queue = DispatchQueue(label: "OAuth2ServiceQueue", attributes: .concurrent)
-    private let semaphore = DispatchSemaphore(value: 1)
-    
+
     func fetchOAuthToken(with code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        queue.async(flags: .barrier) {
-            if let currentCode = self.currentCode, currentCode == code {
-                self.currentTask?.cancel()
-            } else if self.currentTask != nil {
-                completion(.failure(NetworkError.urlSessionError))
-                return
-            }
+        if let currentCode = self.currentCode, currentCode == code {
+            self.currentTask?.cancel()
+        } else if self.currentTask != nil {
+            completion(.failure(NetworkError.urlSessionError))
+            return
+        }
+        
+        guard let request = self.makeTokenRequest(with: code) else {
+            print("Error: Failed to create token request.")
+            let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
+            completion(.failure(NetworkError.urlRequestError(error)))
+            return
+        }
+        
+        self.currentCode = code
+        self.currentTask = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
+            self.currentTask = nil
+            self.currentCode = nil
             
-            guard let request = self.makeTokenRequest(with: code) else {
-                print("Error: Failed to create token request.")
-                let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
-                completion(.failure(NetworkError.urlRequestError(error)))
-                return
-            }
-            
-            self.currentCode = code
-            self.semaphore.wait()
-            self.currentTask = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
-                self.currentTask = nil
-                self.currentCode = nil
-                self.semaphore.signal()
-                
-                switch result {
-                case .success(let tokenResponse):
-                    let accessToken = tokenResponse.accessToken
-                    self.tokenStorage.token = accessToken
-                    DispatchQueue.main.async {
-                        completion(.success(accessToken))
-                    }
-                case .failure(let error):
-                    print("Network request error: \(error)")
-                    DispatchQueue.main.async {
-                        completion(.failure(error))
-                    }
+            switch result {
+            case .success(let tokenResponse):
+                let accessToken = tokenResponse.accessToken
+                self.tokenStorage.token = accessToken
+                DispatchQueue.main.async {
+                    completion(.success(accessToken))
+                }
+            case .failure(let error):
+                print("Network request error: \(error)")
+                DispatchQueue.main.async {
+                    completion(.failure(error))
                 }
             }
-            self.currentTask?.resume()
         }
+        self.currentTask?.resume()
     }
     
     private func makeTokenRequest(with code: String) -> URLRequest? {
-        guard let url = URL(string: UnsplashTokenURLString) else {
+        guard let url = URL(string: Constants.unsplashTokenURLString) else {
             print("Error: Failed to create URL for token request")
             return nil
         }

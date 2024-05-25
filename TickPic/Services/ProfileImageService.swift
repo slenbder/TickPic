@@ -8,54 +8,37 @@
 import Foundation
 
 final class ProfileImageService {
-    
-    struct UserResult: Codable {
-        let profileImage: ProfileImage
-        
-        enum CodingKeys: String, CodingKey {
-            case profileImage = "profile_image"
-        }
-    }
-    
-    struct ProfileImage: Codable {
-        let large: String
-    }
-    
+
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
-    
+
     private init() {}
-    
-    private let semaphore = DispatchSemaphore(value: 1)
+
     private var currentTask: URLSessionTask?
-    
     private(set) var avatarURL: String?
-    
+
     func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
-        semaphore.wait()
-        defer { semaphore.signal() }
-        
         currentTask?.cancel()
-        
+
         let tokenStorage = OAuth2TokenStorage()
         guard let token = tokenStorage.token else {
-            let error = NSError(domain: "ProfileImageService", code: 0, userInfo: [NSLocalizedDescriptionKey: "No token found"])
-            print("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription), Username: \(username)")
+            let error = NSError(domain: "No token found", code: 0, userInfo: nil)
             completion(.failure(error))
+            print("Error: \(error.localizedDescription)")
             return
         }
-        
-        let urlString = "https://api.unsplash.com/users/\(username)"
+
+        let urlString = "\(Constants.defaultBaseURL)/users/\(username)"
         guard let url = URL(string: urlString) else {
-            let error = NSError(domain: "ProfileImageService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
-            print("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription), URL: \(urlString)")
+            let error = NSError(domain: "Invalid URL", code: 0, userInfo: nil)
             completion(.failure(error))
+            print("Error: \(error.localizedDescription)")
             return
         }
-        
+
         var request = URLRequest(url: url)
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
+
         currentTask = URLSession.shared.objectTask(for: request) { (result: Result<UserResult, Error>) in
             switch result {
             case .success(let userResult):
@@ -69,8 +52,8 @@ final class ProfileImageService {
                     userInfo: ["URL": profileImageURL]
                 )
             case .failure(let error):
-                print("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription), Username: \(username)")
                 completion(.failure(error))
+                print("Error fetching profile image URL: \(error.localizedDescription)")
             }
         }
         currentTask?.resume()
