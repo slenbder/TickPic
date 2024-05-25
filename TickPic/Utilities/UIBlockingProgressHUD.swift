@@ -5,22 +5,20 @@
 //  Created by Кирилл Марьясов on 18.05.2024.
 //
 
-import UIKit
 import ProgressHUD
+import UIKit
 
 final class UIBlockingProgressHUD {
-    private static var window: UIWindow? {
-        return UIApplication.shared.windows.first
-    }
-    
     static func show() {
-        UIBlockingProgressHUD.show()
-        window?.isUserInteractionEnabled = false
+        DispatchQueue.main.async {
+            ProgressHUD.animate()
+        }
     }
-    
+
     static func dismiss() {
-        UIBlockingProgressHUD.dismiss()
-        window?.isUserInteractionEnabled = true
+        DispatchQueue.main.async {
+            ProgressHUD.dismiss()
+        }
     }
 }
 

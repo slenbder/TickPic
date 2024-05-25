@@ -56,31 +56,23 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        ProgressHUD.animate()
+        UIBlockingProgressHUD.show()
         oauth2Service.fetchOAuthToken(with: code) { [weak self] result in
-            ProgressHUD.dismiss()
+            UIBlockingProgressHUD.dismiss()
             switch result {
             case .success(let accessToken):
                 self?.profileService.fetchProfile(accessToken) { profileResult in
                     switch profileResult {
                     case .success:
-                        ProfileImageService.shared.fetchProfileImageURL(username: self?.profileService.profile?.username ?? "") { _ in
-                            DispatchQueue.main.async {
-                                self?.switchToTabBarController()
-                            }
+                        DispatchQueue.main.async {
+                            self?.switchToTabBarController()
                         }
                     case .failure(let error):
                         print("Failed to fetch profile: \(error)")
-                        DispatchQueue.main.async {
-                            self?.showErrorAlert()
-                        }
                     }
                 }
             case .failure(let error):
                 print("Failed to obtain access token: \(error)")
-                DispatchQueue.main.async {
-                    self?.showErrorAlert()
-                }
             }
         }
     }
