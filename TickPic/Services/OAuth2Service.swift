@@ -8,69 +8,59 @@
 import Foundation
 
 final class OAuth2Service {
-    fileprivate let UnsplashTokenURLString = "https://unsplash.com/oauth/token"
     static let shared = OAuth2Service()
     
     let tokenStorage = OAuth2TokenStorage()
     
     private init() {}
     
-    private (set) var authToken: String? {
+    private(set) var authToken: String? {
         get { tokenStorage.token }
         set { tokenStorage.token = newValue }
     }
     
+    private var currentTask: URLSessionTask?
+    private var currentCode: String?
+
     func fetchOAuthToken(with code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        guard let request = makeTokenRequest(with: code) else {
+        if let currentCode = self.currentCode, currentCode == code {
+            self.currentTask?.cancel()
+        } else if self.currentTask != nil {
+            completion(.failure(NetworkError.urlSessionError))
+            return
+        }
+        
+        guard let request = self.makeTokenRequest(with: code) else {
             print("Error: Failed to create token request.")
             let error = NSError(domain: "OAuth2Service", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create token request."])
             completion(.failure(NetworkError.urlRequestError(error)))
             return
         }
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Network request error: \(error)")
-                completion(.failure(NetworkError.urlRequestError(error)))
-                return
-            }
+        self.currentCode = code
+        self.currentTask = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
+            self.currentTask = nil
+            self.currentCode = nil
             
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("Error: Failed to get HTTP response.")
-                completion(.failure(NetworkError.urlSessionError))
-                return
-            }
-            
-            guard (200..<300).contains(httpResponse.statusCode) else {
-                print("Unsplash service error: Invalid HTTP status code: \(httpResponse.statusCode)")
-                completion(.failure(NetworkError.httpStatusCode(httpResponse.statusCode)))
-                return
-            }
-            
-            guard let data = data else {
-                print("Error: No data received from server.")
-                completion(.failure(NetworkError.urlSessionError))
-                return
-            }
-            
-            do {
-                let tokenResponse = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
+            switch result {
+            case .success(let tokenResponse):
                 let accessToken = tokenResponse.accessToken
                 self.tokenStorage.token = accessToken
                 DispatchQueue.main.async {
                     completion(.success(accessToken))
                 }
-            } catch {
-                print("Error decoding token response: \(error)")
+            case .failure(let error):
+                print("Network request error: \(error)")
                 DispatchQueue.main.async {
                     completion(.failure(error))
                 }
             }
-        }.resume()
+        }
+        self.currentTask?.resume()
     }
     
     private func makeTokenRequest(with code: String) -> URLRequest? {
-        guard let url = URL(string: UnsplashTokenURLString) else {
+        guard let url = URL(string: Constants.unsplashTokenURLString) else {
             print("Error: Failed to create URL for token request")
             return nil
         }
