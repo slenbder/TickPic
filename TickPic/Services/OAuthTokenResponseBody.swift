@@ -1,18 +1,18 @@
-//
-//  OAuthTokenResponseBody.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 08.05.2024.
-//
-
 import Foundation
 import WebKit
 
+// MARK: - OAuthTokenResponseBody
+
 struct OAuthTokenResponseBody: Decodable {
+    
+    // MARK: - Properties
+    
     let accessToken: String
     let tokenType: String
     let scope: String
     let createdAt: Int
+    
+    // MARK: - CodingKeys
     
     private enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"

@@ -1,14 +1,14 @@
-//
-//  OAuth2TokenStorage.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 08.05.2024.
-//
-
 import SwiftKeychainWrapper
 
+// MARK: - OAuth2TokenStorage
+
 class OAuth2TokenStorage {
+    
+    // MARK: - Properties
+    
     private let tokenKey = "OAuth2AccessToken"
+    
+    // MARK: - Public API
     
     var token: String? {
         get {

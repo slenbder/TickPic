@@ -1,11 +1,6 @@
-//
-//  PSStruct.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 25.05.2024.
-//
-
 import Foundation
+
+// MARK: - ProfileResult
 
 struct ProfileResult: Codable {
     let username: String
@@ -20,6 +15,8 @@ struct ProfileResult: Codable {
         case bio
     }
 }
+
+// MARK: - Profile
 
 struct Profile {
     let username: String
