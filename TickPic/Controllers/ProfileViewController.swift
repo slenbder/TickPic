@@ -1,14 +1,12 @@
-//
-//  ProfileViewController.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 07.05.2024.
-//
-
 import UIKit
 import Kingfisher
 
+// MARK: - ProfileViewController
+
 class ProfileViewController: UIViewController {
+    
+    // MARK: - Properties
+    
     private let profileService = ProfileService.shared
     private let tokenStorage = OAuth2TokenStorage()
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -55,10 +53,11 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
+    // MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = .ypBlack
+        self.view.backgroundColor = UIColor(named: "ypBlack")
         
         setupViews()
         setupConstraints()
@@ -86,11 +85,13 @@ class ProfileViewController: UIViewController {
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
     }
     
-    private func updateProfileDetails(profile: Profile) {
-            nameLabel.text = profile.name
-            loginNameLabel.text = profile.loginName
-            descriptionLabel.text = profile.bio
+    deinit {
+        if let observer = profileImageServiceObserver {
+            NotificationCenter.default.removeObserver(observer)
         }
+    }
+    
+    // MARK: - Private Methods
     
     private func setupViews() {
         view.addSubview(profileImageView)
@@ -124,14 +125,10 @@ class ProfileViewController: UIViewController {
         ])
     }
     
-    @objc private func didTapLogoutButton() {
-        // Handle logout
-    }
-    
-    deinit {
-        if let observer = profileImageServiceObserver {
-            NotificationCenter.default.removeObserver(observer)
-        }
+    private func updateProfileDetails(profile: Profile) {
+        nameLabel.text = profile.name
+        loginNameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
     }
     
     private func updateAvatar() {
@@ -141,5 +138,11 @@ class ProfileViewController: UIViewController {
         else { return }
         
         profileImageView.kf.setImage(with: url)
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func didTapLogoutButton() {
+        // Handle logout
     }
 }

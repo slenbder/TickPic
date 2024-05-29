@@ -1,32 +1,44 @@
-//
-//  SplashViewController.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 08.05.2024.
-//
-
 import UIKit
 
+// MARK: - SplashViewController
+
 final class SplashViewController: UIViewController {
+
+    // MARK: - Properties
+    
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
 
+    // MARK: - UI Elements
+    
     private let splashScreenLogo: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Vector"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
+    // MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor(named: "ypBlack") // Используйте цвет фона "ypBlack"
-        view.addSubview(splashScreenLogo)
+        view.backgroundColor = UIColor(named: "ypBlack")
+        setupViews()
         setupConstraints()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        handleToken()
+    }
+    
+    // MARK: - Private Methods
+    
+    private func setupViews() {
+        view.addSubview(splashScreenLogo)
+    }
+
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             splashScreenLogo.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
@@ -35,17 +47,15 @@ final class SplashViewController: UIViewController {
             splashScreenLogo.heightAnchor.constraint(equalToConstant: 75.11)
         ])
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
+
+    private func handleToken() {
         if let token = oauth2TokenStorage.token {
             fetchProfile(token)
         } else {
             presentAuthViewController()
         }
     }
-    
+
     private func switchToTabBarController() {
         DispatchQueue.main.async {
             guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
@@ -76,14 +86,6 @@ final class SplashViewController: UIViewController {
             }
         }
     }
-}
-
-extension SplashViewController: AuthViewControllerDelegate {
-    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true) { [weak self] in
-            self?.fetchOAuthToken(code)
-        }
-    }
     
     private func fetchOAuthToken(_ code: String) {
         oauth2Service.fetchOAuthToken(with: code) { [weak self] result in
@@ -98,6 +100,12 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
 }
 
+// MARK: - AuthViewControllerDelegate
 
-
-
+extension SplashViewController: AuthViewControllerDelegate {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        dismiss(animated: true) { [weak self] in
+            self?.fetchOAuthToken(code)
+        }
+    }
+}

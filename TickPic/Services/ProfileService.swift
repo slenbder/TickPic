@@ -1,26 +1,23 @@
-//
-//  ProfileService.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 18.05.2024.
-//
-
 import Foundation
 
+// MARK: - ProfileService
+
 final class ProfileService {
+    
+    // MARK: - Constants
+    
     static let shared = ProfileService()
     
-    private init() {}
+    // MARK: - Properties
     
     private(set) var currentProfile: Profile?
     private(set) var profile: Profile?
     
-    func makeRequest(url: URL, bearerToken: String) -> URLRequest {
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        return request
-    }
+    // MARK: - Initializer
+    
+    private init() {}
+    
+    // MARK: - Public Methods
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         let url = URL(string: Constants.meEndpoint)!
@@ -35,7 +32,17 @@ final class ProfileService {
                 completion(.success(profile))
             case .failure(let error):
                 completion(.failure(error))
+                print("Error fetching profile: \(error.localizedDescription)")
             }
         }.resume()
+    }
+    
+    // MARK: - Private Methods
+    
+    private func makeRequest(url: URL, bearerToken: String) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        return request
     }
 }

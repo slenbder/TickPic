@@ -1,27 +1,30 @@
-//
-//  OAuth2Service.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 08.05.2024.
-//  Test Mark
-
 import Foundation
 
+// MARK: - OAuth2Service
+
 final class OAuth2Service {
+    
+    // MARK: - Singleton
+    
     static let shared = OAuth2Service()
     
-    let tokenStorage = OAuth2TokenStorage()
+    // MARK: - Properties
+    
+    private let tokenStorage = OAuth2TokenStorage()
+    private var currentTask: URLSessionTask?
+    private var currentCode: String?
     
     private init() {}
+    
+    // MARK: - Computed Properties
     
     private(set) var authToken: String? {
         get { tokenStorage.token }
         set { tokenStorage.token = newValue }
     }
     
-    private var currentTask: URLSessionTask?
-    private var currentCode: String?
-
+    // MARK: - Public Methods
+    
     func fetchOAuthToken(with code: String, completion: @escaping (Result<String, Error>) -> Void) {
         if let currentCode = self.currentCode, currentCode == code {
             self.currentTask?.cancel()
@@ -58,6 +61,8 @@ final class OAuth2Service {
         }
         self.currentTask?.resume()
     }
+    
+    // MARK: - Private Methods
     
     private func makeTokenRequest(with code: String) -> URLRequest? {
         guard let url = URL(string: Constants.unsplashTokenURLString) else {

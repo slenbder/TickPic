@@ -1,11 +1,6 @@
-//
-//  URLSession+data.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 08.05.2024.
-//
-
 import Foundation
+
+// MARK: - NetworkError
 
 enum NetworkError: Error {
     case httpStatusCode(Int)
@@ -13,7 +8,12 @@ enum NetworkError: Error {
     case urlSessionError
 }
 
+// MARK: - URLSession Extension
+
 extension URLSession {
+    
+    // MARK: - Data Task
+    
     func data(
         for request: URLRequest,
         completion: @escaping (Result<Data, Error>) -> Void
@@ -24,7 +24,7 @@ extension URLSession {
             }
         }
         
-        let task = dataTask(with: request, completionHandler: { data, response, error in
+        let task = dataTask(with: request) { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 if 200 ..< 300 ~= response.statusCode {
                     fulfillCompletionOnMainThread(.success(data))
@@ -39,11 +39,13 @@ extension URLSession {
                 print("URL Session Error")
                 fulfillCompletionOnMainThread(.failure(NetworkError.urlSessionError))
             }
-        })
+        }
         
         task.resume()
         return task
     }
+    
+    // MARK: - Object Task
     
     func objectTask<T: Decodable>(
         for request: URLRequest,

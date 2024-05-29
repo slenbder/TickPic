@@ -1,23 +1,25 @@
-//
-//  AuthViewController.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 07.05.2024.
-//
-
 import UIKit
 import WebKit
 import ProgressHUD
+
+// MARK: - Protocols
 
 protocol AuthViewControllerDelegate: AnyObject {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
+// MARK: - AuthViewController
+
 final class AuthViewController: UIViewController {
+    
+    // MARK: - Properties
+    
     weak var delegate: AuthViewControllerDelegate?
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     private let profileService = ProfileService.shared
+    
+    // MARK: - View Lifecycle
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
@@ -31,7 +33,9 @@ final class AuthViewController: UIViewController {
         }
     }
     
-    func switchToTabBarController() {
+    // MARK: - Private Methods
+    
+    private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else {
             fatalError("No available window to set root view controller")
         }
@@ -53,6 +57,8 @@ final class AuthViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 }
+
+// MARK: - WebViewViewControllerDelegate
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {

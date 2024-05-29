@@ -1,52 +1,66 @@
-//
-//  ProfileViewController.swift
-//  TickPic
-//
-//  Created by Кирилл Марьясов on 07.05.2024.
-//
-
 import UIKit
 import WebKit
 
+// MARK: - Constants
+
 fileprivate let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+
+// MARK: - Protocols
 
 protocol WebViewViewControllerDelegate: AnyObject {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
+// MARK: - WebViewViewController
+
 final class WebViewViewController: UIViewController {
+
+    // MARK: - Outlets
     
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressView: UIProgressView!
     
+    // MARK: - Variables and Properties
+    
     weak var delegate: WebViewViewControllerDelegate?
     private var estimatedProgressObservation: NSKeyValueObservation?
     
+    // MARK: - View Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        webView.navigationDelegate = self
-        
-        guard let url = makeAuthorizationURL() else {
-            fatalError("Failed to create URL")
-        }
-        
-        let request = URLRequest(url: url)
-        webView.load(request)
-        
-        updateProgress()
-        
-        estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, _ in
-            self?.updateProgress()
-        }
+        setupWebView()
+        loadAuthorizationURL()
+        observeEstimatedProgress()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateProgress()
     }
+
+    // MARK: - Private Methods
     
+    private func setupWebView() {
+        webView.navigationDelegate = self
+    }
+    
+    private func loadAuthorizationURL() {
+        guard let url = makeAuthorizationURL() else {
+            fatalError("Failed to create URL")
+        }
+        let request = URLRequest(url: url)
+        webView.load(request)
+        updateProgress()
+    }
+    
+    private func observeEstimatedProgress() {
+        estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, _ in
+            self?.updateProgress()
+        }
+    }
+
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
@@ -66,6 +80,8 @@ final class WebViewViewController: UIViewController {
         return urlComponents.url
     }
 }
+
+// MARK: - WKNavigationDelegate
 
 extension WebViewViewController: WKNavigationDelegate {
     func webView(
