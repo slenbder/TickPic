@@ -6,47 +6,46 @@ final class ImagesListService {
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
     private(set) var photos: [Photo] = []
-    private let session = URLSession.shared
-    private var lastLoadedPage: Int = 0
-    private var isLoading: Bool = false
-    private let baseURL = Constants.defaultBaseURL
-
-    private init() {}
+    private var lastLoadedPage = 0
+    private var isLoading = false
     
-    // MARK: - Fetch Photos
+    init() {}
+    
     func fetchPhotosNextPage() {
         guard !isLoading else { return }
         isLoading = true
-        lastLoadedPage += 1
-        
-        let url = baseURL.appendingPathComponent("/photos")
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        components?.queryItems = [
-            URLQueryItem(name: "page", value: "\(lastLoadedPage)"),
-            URLQueryItem(name: "per_page", value: "10"),
-            URLQueryItem(name: "client_id", value: Constants.accessKey)
-        ]
-        
-        guard let requestURL = components?.url else {
-            print("Error: Invalid URL")
+
+        let nextPage = lastLoadedPage + 1
+        let urlString = "\(Constants.defaultBaseURL)/photos?page=\(nextPage)&per_page=10"
+
+        guard let url = URL(string: urlString) else {
             isLoading = false
             return
         }
-        
-        let request = URLRequest(url: requestURL)
-        
-        session.objectTask(for: request) { (result: Result<[PhotoResult], Error>) in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                switch result {
-                case .success(let photoResults):
+
+        var request = URLRequest(url: url)
+        request.addValue("Client-ID \(Constants.accessKey)", forHTTPHeaderField: "Authorization")
+
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let self = self else { return }
+            defer { self.isLoading = false }
+
+            if let data = data {
+                do {
+                    let photoResults = try JSONDecoder().decode([PhotoResult].self, from: data)
                     let newPhotos = photoResults.map { Photo(from: $0) }
-                    self.photos.append(contentsOf: newPhotos)
-                    NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self)
-                case .failure(let error):
-                    print("Error fetching photos: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self.photos.append(contentsOf: newPhotos)
+                        self.lastLoadedPage = nextPage
+                        NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+                    }
+                } catch {
+                    print("Failed to decode photos: \(error)")
                 }
+            } else if let error = error {
+                print("Failed to fetch photos: \(error)")
             }
-        }.resume()
+        }
+        task.resume()
     }
 }
