@@ -1,10 +1,18 @@
 import UIKit
+import Kingfisher
 
 // MARK: - SingleImageViewController
 
 final class SingleImageViewController: UIViewController {
     
     // MARK: - Properties
+    
+    var imageURL: String? {
+        didSet {
+            guard let imageURL = imageURL, isViewLoaded else { return }
+            loadImage(from: imageURL)
+        }
+    }
     
     var image: UIImage? {
         didSet {
@@ -25,10 +33,13 @@ final class SingleImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupScrollView()
-        guard let image = image else { return }
-        imageView.image = image
-        imageView.frame.size = image.size
-        rescaleAndCenterImageInScrollView(image: image)
+        if let image = image {
+            imageView.image = image
+            imageView.frame.size = image.size
+            rescaleAndCenterImageInScrollView(image: image)
+        } else if let imageURL = imageURL {
+            loadImage(from: imageURL)
+        }
     }
     
     // MARK: - Actions
@@ -38,7 +49,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction private func didTapShareButton(_ sender: UIButton) {
-        guard let image = image else { return }
+        guard let image = imageView.image else { return }
         let share = UIActivityViewController(
             activityItems: [image],
             applicationActivities: nil
@@ -71,6 +82,11 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+    
+    private func loadImage(from url: String) {
+        guard let imageURL = URL(string: url) else { return }
+        imageView.kf.setImage(with: imageURL)
     }
 }
 
