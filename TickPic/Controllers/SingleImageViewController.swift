@@ -1,5 +1,4 @@
 import UIKit
-import Kingfisher
 
 // MARK: - SingleImageViewController
 
@@ -7,12 +6,7 @@ final class SingleImageViewController: UIViewController {
     
     // MARK: - Properties
     
-    var imageURL: String? {
-        didSet {
-            guard let imageURL = imageURL, isViewLoaded else { return }
-            loadImage(from: imageURL)
-        }
-    }
+    var imageURL: String?
     
     var image: UIImage? {
         didSet {
@@ -33,12 +27,16 @@ final class SingleImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupScrollView()
-        if let image = image {
-            imageView.image = image
-            imageView.frame.size = image.size
-            rescaleAndCenterImageInScrollView(image: image)
-        } else if let imageURL = imageURL {
-            loadImage(from: imageURL)
+        
+        if let imageURL = imageURL, let url = URL(string: imageURL) {
+            imageView.kf.setImage(with: url) { result in
+                switch result {
+                case .success(let value):
+                    self.image = value.image
+                case .failure(let error):
+                    print("Error loading image: \(error)")
+                }
+            }
         }
     }
     
@@ -49,7 +47,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction private func didTapShareButton(_ sender: UIButton) {
-        guard let image = imageView.image else { return }
+        guard let image = image else { return }
         let share = UIActivityViewController(
             activityItems: [image],
             applicationActivities: nil
@@ -82,11 +80,6 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
-    }
-    
-    private func loadImage(from url: String) {
-        guard let imageURL = URL(string: url) else { return }
-        imageView.kf.setImage(with: imageURL)
     }
 }
 

@@ -1,10 +1,9 @@
-import Foundation
 import UIKit
+import Kingfisher
 
-final class ImagesListCell: UITableViewCell {
-    // MARK: - Properties
-    
-    static let reuseIdentifier = "ImagesListCell"
+// MARK: - ImagesListCell
+
+class ImagesListCell: UITableViewCell {
     
     // MARK: - Outlets
     
@@ -12,30 +11,25 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
     
-    // MARK: - Initializer Methods
+    // MARK: - Properties
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
+    static let reuseIdentifier = "ImagesListCell"
+    
+    // MARK: - UITableViewCell
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellImage.kf.cancelDownloadTask()
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupViews()
-    }
+    // MARK: - Configuration
     
-    // MARK: - Private Methods
-    
-    private func setupViews() {
+    func config(with photo: Photo) {
+        dateLabel.text = DateFormatter.localizedString(from: photo.createdAt ?? Date(), dateStyle: .long, timeStyle: .none)
+        cellImage.kf.indicatorType = .activity
+        cellImage.kf.setImage(with: URL(string: photo.thumbImageURL), placeholder: UIImage(named: "placeholder"))
         
-    }
-    
-    // MARK: - Configuration Method
-    
-    func configure(with image: UIImage, date: String, isLiked: Bool) {
-        cellImage.image = image
-        dateLabel.text = date
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        let likeImage = photo.isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         likeButton.setImage(likeImage, for: .normal)
     }
 }
