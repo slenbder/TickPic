@@ -1,54 +1,76 @@
 import Foundation
 
 final class ImagesListService {
-
     static let shared = ImagesListService()
-    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
-
-    private init() {}
-
-    private var currentTask: URLSessionTask?
-    private(set) var photos: [Photo] = []
+    private let urlSession = URLSession.shared
     private var lastLoadedPage = 0
-    private var isLoading = false
-    private var loadedPhotoIDs: Set<String> = []
-
+    private var isFetching = false
+    private(set) var photos: [Photo] = []
+    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
+    
+    private init() {}
+    
     func fetchPhotosNextPage() {
-        guard !isLoading else { return }
-        isLoading = true
+        guard !isFetching else { return }
+        isFetching = true
+        lastLoadedPage += 1
         
-        let nextPage = lastLoadedPage + 1
-        let urlString = "\(Constants.defaultBaseURL)/photos?page=\(nextPage)"
-        guard let url = URL(string: urlString) else {
-            isLoading = false
-            return
-        }
-        
+        let url = URL(string: "\(Constants.defaultBaseURL)/photos?page=\(lastLoadedPage)&per_page=10")!
         var request = URLRequest(url: url)
         request.addValue("Client-ID \(Constants.accessKey)", forHTTPHeaderField: "Authorization")
         
-        URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
+        let task = urlSession.dataTask(with: request) { [weak self] data, response, error in
             guard let self = self else { return }
-            self.isLoading = false
-            
-            switch result {
-            case .success(let photoResults):
-                let newPhotos = photoResults.map { Photo(from: $0) }.filter { !self.loadedPhotoIDs.contains($0.id) }
-                self.loadedPhotoIDs.formUnion(newPhotos.map { $0.id })
-                self.photos.append(contentsOf: newPhotos)
-                self.lastLoadedPage = nextPage
-                
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+            DispatchQueue.main.async {
+                self.isFetching = false
+                if let error = error {
+                    print("Error fetching photos: \(error.localizedDescription)")
+                    return
                 }
                 
-            case .failure(let error):
-                print("Error fetching photos: \(error)")
+                guard let data = data,
+                      let photoResults = try? JSONDecoder().decode([PhotoResult].self, from: data) else {
+                    print("Failed to decode photos")
+                    return
+                }
+                
+                let newPhotos = photoResults.map { Photo(from: $0) }
+                self.photos.append(contentsOf: newPhotos)
+                
+                NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
             }
-        }.resume()
+        }
+        task.resume()
     }
     
-    func getPhotos() -> [Photo] {
-        return photos
+    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        let url = URL(string: "\(Constants.defaultBaseURL)/photos/\(photoId)/like")!
+        var request = URLRequest(url: url)
+        request.httpMethod = isLike ? "POST" : "DELETE"
+        request.addValue("Bearer \(OAuth2TokenStorage().token ?? "")", forHTTPHeaderField: "Authorization")
+        
+        let task = urlSession.dataTask(with: request) { [weak self] data, response, error in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let index = self.photos.firstIndex(where: { $0.id == photoId }) else {
+                    completion(.failure(NSError(domain: "Image not found", code: 0, userInfo: nil)))
+                    return
+                }
+                
+                // Create a mutable copy of the Photo and update it
+                var updatedPhoto = self.photos[index]
+                updatedPhoto.isLiked.toggle()
+                self.photos[index] = updatedPhoto
+                
+                NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+                completion(.success(()))
+            }
+        }
+        task.resume()
     }
 }

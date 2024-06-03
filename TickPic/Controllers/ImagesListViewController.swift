@@ -1,11 +1,7 @@
 import UIKit
-
-// MARK: - ImagesListViewController
+import Kingfisher
 
 final class ImagesListViewController: UIViewController {
-    
-    // MARK: - Properties
-    
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     @IBOutlet private var tableView: UITableView!
     
@@ -13,16 +9,12 @@ final class ImagesListViewController: UIViewController {
     private let imagesListService = ImagesListService.shared
     private var imagesListServiceObserver: NSObjectProtocol?
     
-    // MARK: - View Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         setupObservers()
         imagesListService.fetchPhotosNextPage()
     }
-    
-    // MARK: - Private Methods
     
     private func setupTableView() {
         tableView.delegate = self
@@ -43,13 +35,11 @@ final class ImagesListViewController: UIViewController {
     
     private func updateTableViewAnimated() {
         let oldCount = photos.count
-        photos = imagesListService.getPhotos()
+        photos = imagesListService.photos
         let newCount = photos.count
         
         let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
-        tableView.performBatchUpdates {
-            tableView.insertRows(at: indexPaths, with: .automatic)
-        }
+        tableView.insertRows(at: indexPaths, with: .automatic)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -70,8 +60,6 @@ final class ImagesListViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDelegate
-
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
@@ -86,15 +74,7 @@ extension ImagesListViewController: UITableViewDelegate {
         let cellHeight = photo.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == photos.count - 1 {
-            imagesListService.fetchPhotosNextPage()
-        }
-    }
 }
-
-// MARK: - UITableViewDataSource
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -108,16 +88,41 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         configCell(for: imageListCell, with: indexPath)
+        imageListCell.delegate = self
         return imageListCell
     }
     
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let photo = photos[indexPath.row]
-        cell.config(with: photo.largeImageURL)
+        cell.cellImage.kf.indicatorType = .activity
+        cell.cellImage.kf.setImage(
+            with: URL(string: photo.thumbImageURL),
+            placeholder: UIImage(named: "StubPic"),
+            options: nil
+        )
         cell.dateLabel.text = DateFormatter.localizedString(from: photo.createdAt ?? Date(), dateStyle: .long, timeStyle: .none)
+        cell.setIsLiked(photo.isLiked)
+        cell.setLoading(false)
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
         
-        let isLiked = photo.isLiked
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        cell.likeButton.setImage(likeImage, for: .normal)
+        cell.setLoading(true)
+        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+            DispatchQueue.main.async {
+                cell.setLoading(false)
+                switch result {
+                case .success:
+                    self?.photos[indexPath.row].isLiked.toggle()
+                    cell.setIsLiked(self?.photos[indexPath.row].isLiked ?? false)
+                case .failure(let error):
+                    print("Failed to change like status: \(error)")
+                }
+            }
+        }
     }
 }
