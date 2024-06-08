@@ -33,6 +33,7 @@
 		4F98338B2BFE5B3C0019EA4A /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F98338A2BFE5B3C0019EA4A /* ProfileImageService.swift */; };
 		4F98338E2BFF5E4E0019EA4A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4F98338D2BFF5E4E0019EA4A /* Kingfisher */; };
 		4FC87F142BC708D1009E0409 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC87F132BC708D1009E0409 /* ImagesListCell.swift */; };
+		4FF297752C14751100377B20 /* ProfileLogoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF297742C14751100377B20 /* ProfileLogoutService.swift */; };
 		4FF8E6342C01CDB90075BF3E /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 4FF8E6332C01CDB90075BF3E /* SwiftKeychainWrapper */; };
 		4FF8E6372C0240480075BF3E /* PSStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF8E6362C0240480075BF3E /* PSStruct.swift */; };
 		4FF8E6392C0240E90075BF3E /* PISStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF8E6382C0240E90075BF3E /* PISStruct.swift */; };
@@ -65,6 +66,7 @@
 		4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F98338A2BFE5B3C0019EA4A /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		4FC87F132BC708D1009E0409 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		4FF297742C14751100377B20 /* ProfileLogoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLogoutService.swift; sourceTree = "<group>"; };
 		4FF8E6362C0240480075BF3E /* PSStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSStruct.swift; sourceTree = "<group>"; };
 		4FF8E6382C0240E90075BF3E /* PISStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PISStruct.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -139,6 +141,7 @@
 				4F4333CA2BEB9345001C92B4 /* OAuth2TokenStorage.swift */,
 				4F4333C82BEB91AE001C92B4 /* OAuthTokenResponseBody.swift */,
 				4F98338A2BFE5B3C0019EA4A /* ProfileImageService.swift */,
+				4FF297742C14751100377B20 /* ProfileLogoutService.swift */,
 				4F3916152BF9EE500003624E /* ProfileService.swift */,
 				4F4333C62BEB9086001C92B4 /* URLSession+data.swift */,
 			);
@@ -271,6 +274,7 @@
 				4F3916142BF8ACC50003624E /* UIBlockingProgressHUD.swift in Sources */,
 				4F6CEFCC2BD544F1004ECE99 /* SingleImageViewController.swift in Sources */,
 				4F4333C72BEB9086001C92B4 /* URLSession+data.swift in Sources */,
+				4FF297752C14751100377B20 /* ProfileLogoutService.swift in Sources */,
 				4F4333C32BEA621D001C92B4 /* WebViewViewController.swift in Sources */,
 				4F4333C52BEB8CD8001C92B4 /* OAuth2Service.swift in Sources */,
 				4F73F4822C07651800713D0F /* Photo.swift in Sources */,

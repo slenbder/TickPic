@@ -114,14 +114,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" ambiguous="YES" minimumZoomScale="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="es9-79-YPi">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" minimumZoomScale="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="es9-79-YPi">
                                 <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1" translatesAutoresizingMaskIntoConstraints="NO" id="RrL-dG-5tb">
-                                        <rect key="frame" x="0.0" y="0.0" width="271" height="352"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1" translatesAutoresizingMaskIntoConstraints="NO" id="RrL-dG-5tb">
+                                        <rect key="frame" x="0.0" y="290" width="430" height="352"/>
                                     </imageView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="RrL-dG-5tb" secondAttribute="trailing" id="3VK-bi-sNj"/>
+                                    <constraint firstItem="RrL-dG-5tb" firstAttribute="top" secondItem="es9-79-YPi" secondAttribute="top" id="9Fa-en-lCQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="RrL-dG-5tb" secondAttribute="bottom" id="I9g-0S-3Nd"/>
+                                    <constraint firstItem="RrL-dG-5tb" firstAttribute="leading" secondItem="es9-79-YPi" secondAttribute="leading" id="OLK-FK-cRG"/>
+                                </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="P7C-VU-amW"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="rpA-7Q-MOp"/>
                                 <connections>
@@ -170,7 +175,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AcN-73-1QN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2438" y="17"/>
+            <point key="canvasLocation" x="2437.6744186046512" y="16.738197424892704"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="Vta-4Y-XXZ">
