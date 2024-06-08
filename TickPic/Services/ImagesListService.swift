@@ -51,4 +51,9 @@ final class ImagesListService {
             }
         }
     }
+    
+    func clearPhotos() {
+        photos.removeAll()
+        NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+    }
 }

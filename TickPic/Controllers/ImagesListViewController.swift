@@ -45,6 +45,8 @@ final class ImagesListViewController: UIViewController {
         photos = imagesListService.photos
         let newCount = photos.count
         
+        guard oldCount < newCount else { return }
+        
         let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
         tableView.performBatchUpdates {
             tableView.insertRows(at: indexPaths, with: .automatic)

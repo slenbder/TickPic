@@ -143,6 +143,19 @@ class ProfileViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapLogoutButton() {
-        // Handle logout
+        print("Logout button tapped")
+        ProfileLogoutService.shared.logout()
+        switchToAuthViewController()
+    }
+    
+    private func switchToAuthViewController() {
+        guard let window = UIApplication.shared.windows.first else {
+            fatalError("Invalid Configuration")
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+            fatalError("Unable to instantiate AuthViewController")
+        }
+        window.rootViewController = authViewController
     }
 }
