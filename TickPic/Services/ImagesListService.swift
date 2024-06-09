@@ -48,7 +48,7 @@ final class ImagesListService {
         }
     }
     
-    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeLike(photoId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let token = tokenStorage.token else {
             completion(.failure(NetworkError.urlRequestError(NSError(domain: "No token found", code: 0, userInfo: nil))))
             return
@@ -56,7 +56,7 @@ final class ImagesListService {
         
         let url = URL(string: "\(Constants.defaultBaseURL)/photos/\(photoId)/like")!
         var request = URLRequest(url: url)
-        request.httpMethod = isLike ? "POST" : "DELETE"
+        request.httpMethod = isLiked ? "POST" : "DELETE"
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         URLSession.shared.data(for: request) { result in

@@ -114,19 +114,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" minimumZoomScale="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="es9-79-YPi">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="es9-79-YPi">
                                 <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1" translatesAutoresizingMaskIntoConstraints="NO" id="RrL-dG-5tb">
-                                        <rect key="frame" x="0.0" y="290" width="430" height="352"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1" translatesAutoresizingMaskIntoConstraints="NO" id="RrL-dG-5tb">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="RrL-dG-5tb" secondAttribute="trailing" id="3VK-bi-sNj"/>
-                                    <constraint firstItem="RrL-dG-5tb" firstAttribute="top" secondItem="es9-79-YPi" secondAttribute="top" id="9Fa-en-lCQ"/>
-                                    <constraint firstAttribute="bottom" secondItem="RrL-dG-5tb" secondAttribute="bottom" id="I9g-0S-3Nd"/>
-                                    <constraint firstItem="RrL-dG-5tb" firstAttribute="leading" secondItem="es9-79-YPi" secondAttribute="leading" id="OLK-FK-cRG"/>
-                                </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="P7C-VU-amW"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="rpA-7Q-MOp"/>
                                 <connections>
@@ -157,14 +152,14 @@
                         <viewLayoutGuide key="safeArea" id="YKr-eb-Pfd"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
+                            <constraint firstItem="YKr-eb-Pfd" firstAttribute="trailing" secondItem="es9-79-YPi" secondAttribute="trailing" id="AAU-ug-dJx"/>
                             <constraint firstItem="c8J-7e-ccX" firstAttribute="centerX" secondItem="YKr-eb-Pfd" secondAttribute="centerX" id="GgH-mg-lnL"/>
                             <constraint firstItem="KuD-Wh-r7b" firstAttribute="leading" secondItem="YKr-eb-Pfd" secondAttribute="leading" constant="8" id="IMj-Dq-yD5"/>
-                            <constraint firstItem="YKr-eb-Pfd" firstAttribute="trailing" secondItem="es9-79-YPi" secondAttribute="trailing" id="Jat-7U-uWD"/>
-                            <constraint firstAttribute="bottom" secondItem="es9-79-YPi" secondAttribute="bottom" id="Toe-8Y-AtJ"/>
-                            <constraint firstItem="es9-79-YPi" firstAttribute="top" secondItem="lpk-Zm-dPL" secondAttribute="top" id="bAe-Pn-to4"/>
+                            <constraint firstAttribute="bottom" secondItem="es9-79-YPi" secondAttribute="bottom" id="IW7-Gw-b4K"/>
+                            <constraint firstItem="es9-79-YPi" firstAttribute="top" secondItem="lpk-Zm-dPL" secondAttribute="top" id="XSL-zj-6TY"/>
                             <constraint firstItem="KuD-Wh-r7b" firstAttribute="top" secondItem="YKr-eb-Pfd" secondAttribute="top" constant="8" id="hk8-cY-HFT"/>
                             <constraint firstItem="YKr-eb-Pfd" firstAttribute="bottom" secondItem="c8J-7e-ccX" secondAttribute="bottom" constant="17" id="iAF-FM-yPl"/>
-                            <constraint firstItem="es9-79-YPi" firstAttribute="leading" secondItem="YKr-eb-Pfd" secondAttribute="leading" id="lzb-9x-70n"/>
+                            <constraint firstItem="es9-79-YPi" firstAttribute="leading" secondItem="YKr-eb-Pfd" secondAttribute="leading" id="xgx-OJ-rbJ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="eH6-DR-gQe"/>

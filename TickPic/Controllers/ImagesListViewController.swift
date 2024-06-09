@@ -2,9 +2,9 @@ import UIKit
 import Kingfisher
 
 final class ImagesListViewController: UIViewController {
-
+    
     // MARK: - Properties
-
+    
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     @IBOutlet private var tableView: UITableView!
     
@@ -110,7 +110,7 @@ extension ImagesListViewController: UITableViewDataSource {
     
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let photo = photos[indexPath.row]
-        let url = URL(string: photo.thumbImageURL)
+        let url = URL(string: photo.largeImageURL)
         cell.cellImage.kf.indicatorType = .activity
         cell.cellImage.kf.setImage(with: url, placeholder: UIImage(named: "StubPic")) { result in
             switch result {
@@ -134,7 +134,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
         
         cell.setLikeButtonEnabled(false)
         
-        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+        imagesListService.changeLike(photoId: photo.id, isLiked: !photo.isLiked) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
@@ -147,4 +147,5 @@ extension ImagesListViewController: ImagesListCellDelegate {
             }
         }
     }
+    
 }
