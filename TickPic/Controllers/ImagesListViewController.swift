@@ -64,8 +64,7 @@ final class ImagesListViewController: UIViewController {
             }
             
             let photo = photos[indexPath.row]
-            viewController.imageUrl = URL(string: photo.fullImageURL)  // Передаем URL на полномасштабное изображение
-        } else {
+            viewController.imageUrl = URL(string: photo.fullImageURL)        } else {
             super.prepare(for: segue, sender: sender)
         }
     }

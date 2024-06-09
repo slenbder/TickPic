@@ -7,7 +7,7 @@ struct Photo {
     let welcomeDescription: String?
     let thumbImageURL: String
     let largeImageURL: String
-    let fullImageURL: String  // Новое поле
+    let fullImageURL: String
     var isLiked: Bool
     
     init(from photoResult: PhotoResult) {
@@ -16,7 +16,7 @@ struct Photo {
         self.welcomeDescription = photoResult.description
         self.thumbImageURL = photoResult.urls.thumb
         self.largeImageURL = photoResult.urls.full
-        self.fullImageURL = photoResult.urls.full  // Инициализация нового поля
+        self.fullImageURL = photoResult.urls.full
         self.isLiked = photoResult.likedByUser
         
         let dateFormatter = ISO8601DateFormatter()
