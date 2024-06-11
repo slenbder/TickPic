@@ -65,9 +65,10 @@ final class ImagesListViewController: UIViewController {
             }
             
             let photo = photos[indexPath.row]
-            viewController.imageUrl = photo.fullImageURL        } else {
-                super.prepare(for: segue, sender: sender)
-            }
+            viewController.imageUrl = photo.fullImageURL
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
     }
 }
 

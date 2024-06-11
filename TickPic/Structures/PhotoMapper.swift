@@ -1,8 +1,9 @@
 import Foundation
 
 struct PhotoMapper {
+    private static let dateFormatter = ISO8601DateFormatter()
+    
     static func map(from photoResult: PhotoResult) -> Photo {
-        let dateFormatter = ISO8601DateFormatter()
         let createdAt = dateFormatter.date(from: photoResult.createdAt)
         
         let thumbImageURL = URL(string: photoResult.urls.thumb)!

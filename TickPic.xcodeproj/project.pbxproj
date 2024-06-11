@@ -170,11 +170,11 @@
 		4FF8E6352C0240200075BF3E /* Structures */ = {
 			isa = PBXGroup;
 			children = (
+				4F9B57DA2C1848A3004C8E89 /* PhotoMapper.swift */,
 				4F73F4832C086B7200713D0F /* PhotoResult.swift */,
 				4F73F4812C07651800713D0F /* Photo.swift */,
 				4FF8E6362C0240480075BF3E /* PSStruct.swift */,
 				4FF8E6382C0240E90075BF3E /* PISStruct.swift */,
-				4F9B57DA2C1848A3004C8E89 /* PhotoMapper.swift */,
 			);
 			path = Structures;
 			sourceTree = "<group>";
