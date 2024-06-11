@@ -4,9 +4,7 @@ final class ImagesListService {
     static let shared = ImagesListService()
     internal var photos: [Photo] = []
     private let tokenStorage = OAuth2TokenStorage()
-    private var currentPage = 1
-    private var isFetchingPhotos = false
-
+    
     static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
     
     func fetchPhotosNextPage() {
@@ -15,29 +13,15 @@ final class ImagesListService {
             return
         }
         
-        guard !isFetchingPhotos else { return }
-        
-        isFetchingPhotos = true
-        
-        var urlComponents = URLComponents(string: "\(Constants.defaultBaseURL)/photos")!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "page", value: "\(currentPage)"),
-            URLQueryItem(name: "per_page", value: "10")
-        ]
-        
-        var request = URLRequest(url: urlComponents.url!)
+        var request = URLRequest(url: URL(string: "\(Constants.defaultBaseURL)/photos")!)
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         URLSession.shared.data(for: request) { [weak self] result in
-            guard let self = self else { return }
-            self.isFetchingPhotos = false
-            
             switch result {
             case .success(let data):
                 do {
                     let photoResults = try JSONDecoder().decode([PhotoResult].self, from: data)
-                    self.photos.append(contentsOf: photoResults.map { Photo(from: $0) })
-                    self.currentPage += 1
+                    self?.photos.append(contentsOf: photoResults.map { PhotoMapper.map(from: $0) })
                     NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
                 } catch {
                     print("Failed to decode photos: \(error)")
@@ -48,7 +32,7 @@ final class ImagesListService {
         }
     }
     
-    func changeLike(photoId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let token = tokenStorage.token else {
             completion(.failure(NetworkError.urlRequestError(NSError(domain: "No token found", code: 0, userInfo: nil))))
             return
@@ -56,7 +40,7 @@ final class ImagesListService {
         
         let url = URL(string: "\(Constants.defaultBaseURL)/photos/\(photoId)/like")!
         var request = URLRequest(url: url)
-        request.httpMethod = isLiked ? "POST" : "DELETE"
+        request.httpMethod = isLike ? "POST" : "DELETE"
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         URLSession.shared.data(for: request) { result in
@@ -71,7 +55,6 @@ final class ImagesListService {
     
     func clearPhotos() {
         photos.removeAll()
-        currentPage = 1
         NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
     }
 }

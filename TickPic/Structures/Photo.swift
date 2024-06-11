@@ -5,21 +5,8 @@ struct Photo {
     let size: CGSize
     let createdAt: Date?
     let welcomeDescription: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    let fullImageURL: String
+    let thumbImageURL: URL
+    let largeImageURL: URL
+    let fullImageURL: URL
     var isLiked: Bool
-    
-    init(from photoResult: PhotoResult) {
-        self.id = photoResult.id
-        self.size = CGSize(width: photoResult.width, height: photoResult.height)
-        self.welcomeDescription = photoResult.description
-        self.thumbImageURL = photoResult.urls.thumb
-        self.largeImageURL = photoResult.urls.full
-        self.fullImageURL = photoResult.urls.full
-        self.isLiked = photoResult.likedByUser
-        
-        let dateFormatter = ISO8601DateFormatter()
-        self.createdAt = dateFormatter.date(from: photoResult.createdAt)
-    }
 }
