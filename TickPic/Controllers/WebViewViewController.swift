@@ -1,10 +1,6 @@
 import UIKit
 import WebKit
 
-// MARK: - Constants
-
-fileprivate let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-
 // MARK: - Protocols
 
 protocol WebViewViewControllerDelegate: AnyObject {
@@ -68,7 +64,7 @@ final class WebViewViewController: UIViewController {
     }
     
     private func makeAuthorizationURL() -> URL? {
-        guard var urlComponents = URLComponents(string: UnsplashAuthorizeURLString) else {
+        guard var urlComponents = URLComponents(string: Constants.unsplashAuthorizeURLString) else {
             print("Failed to create URLComponents")
             return nil
         }
