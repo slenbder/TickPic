@@ -37,6 +37,11 @@ final class ProfileService {
         }.resume()
     }
     
+    func clearProfile() {
+        currentProfile = nil
+        profile = nil
+    }
+    
     // MARK: - Private Methods
     
     private func makeRequest(url: URL, bearerToken: String) -> URLRequest {

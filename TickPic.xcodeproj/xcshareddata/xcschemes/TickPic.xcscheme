@@ -29,6 +29,24 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4F73F4882C086D1A00713D0F"
+               BuildableName = "TickPicTests.xctest"
+               BlueprintName = "TickPicTests"
+               ReferencedContainer = "container:TickPic.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "ImagesListServiceTests/testFetchPhotos()">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

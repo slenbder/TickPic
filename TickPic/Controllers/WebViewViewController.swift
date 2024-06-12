@@ -48,7 +48,8 @@ final class WebViewViewController: UIViewController {
     
     private func loadAuthorizationURL() {
         guard let url = makeAuthorizationURL() else {
-            fatalError("Failed to create URL")
+            print("Failed to create URL")
+            return
         }
         let request = URLRequest(url: url)
         webView.load(request)
@@ -84,11 +85,15 @@ final class WebViewViewController: UIViewController {
 // MARK: - WKNavigationDelegate
 
 extension WebViewViewController: WKNavigationDelegate {
-    func webView(
-        _ webView: WKWebView,
-        decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
-    ) {
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("Failed provisional navigation: \(error.localizedDescription)")
+    }
+    
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        print("Failed navigation: \(error.localizedDescription)")
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let code = code(from: navigationAction) {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)

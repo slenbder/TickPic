@@ -143,6 +143,35 @@ class ProfileViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapLogoutButton() {
-        // Handle logout
+        print("Logout button tapped")
+        
+        let alertController = UIAlertController(
+            title: "Пока, пока!",
+            message: "Вы уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Нет", style: .cancel)
+        let confirmAction = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
+            
+            ProfileLogoutService.shared.logout()
+            self!.switchToAuthViewController()
+        }
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(confirmAction)
+        
+        present(alertController, animated: true)
+    }
+    
+    private func switchToAuthViewController() {
+        guard let window = UIApplication.shared.windows.first else {
+            fatalError("Invalid Configuration")
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+            fatalError("Unable to instantiate AuthViewController")
+        }
+        window.rootViewController = authViewController
     }
 }

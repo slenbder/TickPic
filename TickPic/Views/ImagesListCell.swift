@@ -1,41 +1,35 @@
-import Foundation
 import UIKit
 
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
+
 final class ImagesListCell: UITableViewCell {
-    // MARK: - Properties
-    
     static let reuseIdentifier = "ImagesListCell"
-    
-    // MARK: - Outlets
     
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
     
-    // MARK: - Initializer Methods
+    weak var delegate: ImagesListCellDelegate?
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
+    @IBAction private func likeButtonClicked() {
+        delegate?.imageListCellDidTapLike(self)
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupViews()
-    }
-    
-    // MARK: - Private Methods
-    
-    private func setupViews() {
-        
-    }
-    
-    // MARK: - Configuration Method
-    
-    func configure(with image: UIImage, date: String, isLiked: Bool) {
-        cellImage.image = image
-        dateLabel.text = date
+    func setIsLiked(_ isLiked: Bool) {
         let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         likeButton.setImage(likeImage, for: .normal)
+    }
+    
+    func setLikeButtonEnabled(_ isEnabled: Bool) {
+        likeButton.isUserInteractionEnabled = isEnabled
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellImage.kf.cancelDownloadTask()
+        cellImage.image = UIImage(named: "StubPic")
+        setIsLiked(false)
     }
 }
