@@ -4,6 +4,8 @@ import Foundation
 final class WebViewPresenterSpy: WebViewPresenterProtocol {
     var viewDidLoadCalled: Bool = false
     var view: WebViewViewControllerProtocol?
+    var presenter: TickPic.WebViewPresenterProtocol?
+    var loadRequestCalled: Bool = false
 
     func viewDidLoad() {
         viewDidLoadCalled = true
@@ -14,12 +16,6 @@ final class WebViewPresenterSpy: WebViewPresenterProtocol {
     func code(from url: URL) -> String? {
         return nil
     }
-}
-
-final class WebViewViewControllerSpy: WebViewViewControllerProtocol {
-    var presenter: TickPic.WebViewPresenterProtocol?
-
-    var loadRequestCalled: Bool = false
 
     func load(request: URLRequest) {
         loadRequestCalled = true
