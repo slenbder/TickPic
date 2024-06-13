@@ -36,11 +36,23 @@
 		4FC87F142BC708D1009E0409 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC87F132BC708D1009E0409 /* ImagesListCell.swift */; };
 		4FCB25352C1B3FB9005F5572 /* WebViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB25342C1B3FB9005F5572 /* WebViewPresenter.swift */; };
 		4FCB25372C1B513B005F5572 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB25362C1B513B005F5572 /* AuthHelper.swift */; };
+		4FCB253F2C1B5DD5005F5572 /* WebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB253E2C1B5DD5005F5572 /* WebViewTests.swift */; };
+		4FCB25462C1B6165005F5572 /* WebViewSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB25452C1B6165005F5572 /* WebViewSpy.swift */; };
 		4FF297752C14751100377B20 /* ProfileLogoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF297742C14751100377B20 /* ProfileLogoutService.swift */; };
 		4FF8E6342C01CDB90075BF3E /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 4FF8E6332C01CDB90075BF3E /* SwiftKeychainWrapper */; };
 		4FF8E6372C0240480075BF3E /* PSStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF8E6362C0240480075BF3E /* PSStruct.swift */; };
 		4FF8E6392C0240E90075BF3E /* PISStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF8E6382C0240E90075BF3E /* PISStruct.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4FCB25402C1B5DD5005F5572 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F4C7ED32BBEFA8E00F8E8BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F4C7EDA2BBEFA8E00F8E8BA;
+			remoteInfo = TickPic;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4F3916132BF8ACC50003624E /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
@@ -72,6 +84,9 @@
 		4FC87F132BC708D1009E0409 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		4FCB25342C1B3FB9005F5572 /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
 		4FCB25362C1B513B005F5572 /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
+		4FCB253C2C1B5DD5005F5572 /* TickPicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TickPicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FCB253E2C1B5DD5005F5572 /* WebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewTests.swift; sourceTree = "<group>"; };
+		4FCB25452C1B6165005F5572 /* WebViewSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewSpy.swift; sourceTree = "<group>"; };
 		4FF297742C14751100377B20 /* ProfileLogoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLogoutService.swift; sourceTree = "<group>"; };
 		4FF8E6362C0240480075BF3E /* PSStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSStruct.swift; sourceTree = "<group>"; };
 		4FF8E6382C0240E90075BF3E /* PISStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PISStruct.swift; sourceTree = "<group>"; };
@@ -88,6 +103,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FCB25392C1B5DD5005F5572 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -95,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				4F4C7EDD2BBEFA8E00F8E8BA /* TickPic */,
+				4FCB253D2C1B5DD5005F5572 /* TickPicTests */,
 				4F4C7EDC2BBEFA8E00F8E8BA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				4F4C7EDB2BBEFA8E00F8E8BA /* TickPic.app */,
+				4FCB253C2C1B5DD5005F5572 /* TickPicTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -173,6 +197,15 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		4FCB253D2C1B5DD5005F5572 /* TickPicTests */ = {
+			isa = PBXGroup;
+			children = (
+				4FCB253E2C1B5DD5005F5572 /* WebViewTests.swift */,
+				4FCB25452C1B6165005F5572 /* WebViewSpy.swift */,
+			);
+			path = TickPicTests;
+			sourceTree = "<group>";
+		};
 		4FF8E6352C0240200075BF3E /* Structures */ = {
 			isa = PBXGroup;
 			children = (
@@ -210,6 +243,24 @@
 			productReference = 4F4C7EDB2BBEFA8E00F8E8BA /* TickPic.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4FCB253B2C1B5DD5005F5572 /* TickPicTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FCB25422C1B5DD5005F5572 /* Build configuration list for PBXNativeTarget "TickPicTests" */;
+			buildPhases = (
+				4FCB25382C1B5DD5005F5572 /* Sources */,
+				4FCB25392C1B5DD5005F5572 /* Frameworks */,
+				4FCB253A2C1B5DD5005F5572 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4FCB25412C1B5DD5005F5572 /* PBXTargetDependency */,
+			);
+			name = TickPicTests;
+			productName = TickPicTests;
+			productReference = 4FCB253C2C1B5DD5005F5572 /* TickPicTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -222,6 +273,10 @@
 				TargetAttributes = {
 					4F4C7EDA2BBEFA8E00F8E8BA = {
 						CreatedOnToolsVersion = 15.3;
+					};
+					4FCB253B2C1B5DD5005F5572 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 4F4C7EDA2BBEFA8E00F8E8BA;
 					};
 				};
 			};
@@ -244,6 +299,7 @@
 			projectRoot = "";
 			targets = (
 				4F4C7EDA2BBEFA8E00F8E8BA /* TickPic */,
+				4FCB253B2C1B5DD5005F5572 /* TickPicTests */,
 			);
 		};
 /* End PBXProject section */
@@ -256,6 +312,13 @@
 				4F4C7EE82BBEFA8F00F8E8BA /* Assets.xcassets in Resources */,
 				4F4C7EEB2BBEFA8F00F8E8BA /* Base in Resources */,
 				4F4C7EE62BBEFA8E00F8E8BA /* Base in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FCB253A2C1B5DD5005F5572 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,7 +359,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FCB25382C1B5DD5005F5572 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FCB253F2C1B5DD5005F5572 /* WebViewTests.swift in Sources */,
+				4FCB25462C1B6165005F5572 /* WebViewSpy.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4FCB25412C1B5DD5005F5572 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F4C7EDA2BBEFA8E00F8E8BA /* TickPic */;
+			targetProxy = 4FCB25402C1B5DD5005F5572 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4F4C7EE42BBEFA8E00F8E8BA /* Main.storyboard */ = {
@@ -505,6 +585,44 @@
 			};
 			name = Release;
 		};
+		4FCB25432C1B5DD5005F5572 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6D5U6N6YZA;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.praktikum.TickPic.TickPicTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TickPic.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TickPic";
+			};
+			name = Debug;
+		};
+		4FCB25442C1B5DD5005F5572 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6D5U6N6YZA;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.praktikum.TickPic.TickPicTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TickPic.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TickPic";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -522,6 +640,15 @@
 			buildConfigurations = (
 				4F4C7EF02BBEFA8F00F8E8BA /* Debug */,
 				4F4C7EF12BBEFA8F00F8E8BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FCB25422C1B5DD5005F5572 /* Build configuration list for PBXNativeTarget "TickPicTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FCB25432C1B5DD5005F5572 /* Debug */,
+				4FCB25442C1B5DD5005F5572 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
