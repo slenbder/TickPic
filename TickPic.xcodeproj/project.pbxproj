@@ -34,6 +34,7 @@
 		4F98338E2BFF5E4E0019EA4A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4F98338D2BFF5E4E0019EA4A /* Kingfisher */; };
 		4F9B57DB2C1848A3004C8E89 /* PhotoMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B57DA2C1848A3004C8E89 /* PhotoMapper.swift */; };
 		4FC87F142BC708D1009E0409 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC87F132BC708D1009E0409 /* ImagesListCell.swift */; };
+		4FCB25352C1B3FB9005F5572 /* WebViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB25342C1B3FB9005F5572 /* WebViewPresenter.swift */; };
 		4FF297752C14751100377B20 /* ProfileLogoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF297742C14751100377B20 /* ProfileLogoutService.swift */; };
 		4FF8E6342C01CDB90075BF3E /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 4FF8E6332C01CDB90075BF3E /* SwiftKeychainWrapper */; };
 		4FF8E6372C0240480075BF3E /* PSStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF8E6362C0240480075BF3E /* PSStruct.swift */; };
@@ -68,6 +69,7 @@
 		4F98338A2BFE5B3C0019EA4A /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		4F9B57DA2C1848A3004C8E89 /* PhotoMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMapper.swift; sourceTree = "<group>"; };
 		4FC87F132BC708D1009E0409 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		4FCB25342C1B3FB9005F5572 /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
 		4FF297742C14751100377B20 /* ProfileLogoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLogoutService.swift; sourceTree = "<group>"; };
 		4FF8E6362C0240480075BF3E /* PSStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSStruct.swift; sourceTree = "<group>"; };
 		4FF8E6382C0240E90075BF3E /* PISStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PISStruct.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				4F4333CC2BEBAAB6001C92B4 /* SplashViewController.swift */,
 				4F47F8FB2BFF993200789665 /* TabBarController.swift */,
 				4F4333C22BEA621D001C92B4 /* WebViewViewController.swift */,
+				4FCB25342C1B3FB9005F5572 /* WebViewPresenter.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FCB25352C1B3FB9005F5572 /* WebViewPresenter.swift in Sources */,
 				4F4C7EE32BBEFA8E00F8E8BA /* ImagesListViewController.swift in Sources */,
 				4F3916162BF9EE500003624E /* ProfileService.swift in Sources */,
 				4F4C7EDF2BBEFA8E00F8E8BA /* AppDelegate.swift in Sources */,
