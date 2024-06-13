@@ -23,14 +23,17 @@ final class AuthViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
-            if let webViewViewController = segue.destination as? WebViewViewController {
-                let webViewPresenter = WebViewPresenter()
-                webViewViewController.presenter = webViewPresenter
-                webViewPresenter.view = webViewViewController
-                webViewViewController.delegate = self
-            } else {
+            guard
+                let webViewViewController = segue.destination as? WebViewViewController
+            else {
                 assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
+                return
             }
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
+            webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
@@ -78,10 +81,12 @@ extension AuthViewController: WebViewViewControllerDelegate {
                         }
                     case .failure(let error):
                         print("Failed to fetch profile: \(error)")
+                        self?.showErrorAlert()
                     }
                 }
             case .failure(let error):
                 print("Failed to obtain access token: \(error)")
+                self?.showErrorAlert()
             }
         }
     }

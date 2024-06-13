@@ -3,13 +3,6 @@ import WebKit
 
 // MARK: - Protocols
 
-public protocol WebViewViewControllerProtocol: AnyObject {
-    var presenter: WebViewPresenterProtocol? { get set }
-    func load(request: URLRequest)
-    func setProgressValue(_ newValue: Float)
-    func setProgressHidden(_ isHidden: Bool)
-}
-
 protocol WebViewViewControllerDelegate: AnyObject {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
@@ -17,7 +10,14 @@ protocol WebViewViewControllerDelegate: AnyObject {
 
 // MARK: - WebViewViewController
 
-final class WebViewViewController: UIViewController, WebViewViewControllerProtocol {
+public protocol WebViewViewControllerProtocol: AnyObject {
+    var presenter: WebViewPresenterProtocol? { get set }
+    func load(request: URLRequest)
+    func setProgressValue(_ newValue: Float)
+    func setProgressHidden(_ isHidden: Bool)
+}
+
+final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
     
     // MARK: - Outlets
     
@@ -37,29 +37,28 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
         
         webView.navigationDelegate = self
         presenter?.viewDidLoad()
+        
         observeEstimatedProgress()
     }
     
-    // MARK: - WebViewViewControllerProtocol
-    
-    func load(request: URLRequest) {
-        webView.load(request)
-    }
-
-    func setProgressValue(_ newValue: Float) {
-        progressView.progress = newValue
-    }
-
-    func setProgressHidden(_ isHidden: Bool) {
-        progressView.isHidden = isHidden
-    }
-
     // MARK: - Private Methods
     
     private func observeEstimatedProgress() {
         estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, _ in
             self?.presenter?.didUpdateProgressValue(self?.webView.estimatedProgress ?? 0.0)
         }
+    }
+
+    func load(request: URLRequest) {
+        webView.load(request)
+    }
+    
+    func setProgressValue(_ newValue: Float) {
+        progressView.progress = newValue
+    }
+
+    func setProgressHidden(_ isHidden: Bool) {
+        progressView.isHidden = isHidden
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
@@ -82,7 +81,7 @@ extension WebViewViewController: WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if let code = code(from: navigationAction) {
+        if let url = navigationAction.request.url, let code = presenter?.code(from: url) {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {
