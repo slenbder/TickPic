@@ -35,7 +35,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4F73F4882C086D1A00713D0F"
+               BlueprintIdentifier = "4FCB253B2C1B5DD5005F5572"
                BuildableName = "TickPicTests.xctest"
                BlueprintName = "TickPicTests"
                ReferencedContainer = "container:TickPic.xcodeproj">
