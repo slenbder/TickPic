@@ -10,6 +10,7 @@ class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let tokenStorage = OAuth2TokenStorage()
     private let profileLogoutService: ProfileLogoutServiceProtocol = ProfileLogoutService.shared
+    private let profileNotificationService: ProfileNotificationServiceProtocol = ProfileNotificationService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
     private lazy var profileImageView: UIImageView = {
@@ -69,14 +70,7 @@ class ProfileViewController: UIViewController {
             print("Profile not found")
         }
         
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                self?.updateAvatar()
-            }
+        profileNotificationService.addObserver(self, selector: #selector(updateAvatar), name: ProfileImageService.didChangeNotification, object: nil)
         
         updateAvatar()
     }
@@ -87,9 +81,7 @@ class ProfileViewController: UIViewController {
     }
     
     deinit {
-        if let observer = profileImageServiceObserver {
-            NotificationCenter.default.removeObserver(observer)
-        }
+        profileNotificationService.removeObserver(self, name: ProfileImageService.didChangeNotification, object: nil)
     }
     
     // MARK: - Private Methods
@@ -132,7 +124,7 @@ class ProfileViewController: UIViewController {
         descriptionLabel.text = profile.bio
     }
     
-    private func updateAvatar() {
+    @objc private func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
