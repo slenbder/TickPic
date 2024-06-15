@@ -3,7 +3,7 @@ import Kingfisher
 
 // MARK: - ProfileViewController
 
-class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+class ProfileViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -12,7 +12,6 @@ class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     private let profileLogoutService: ProfileLogoutServiceProtocol = ProfileLogoutService.shared
     private let profileNotificationService: ProfileNotificationServiceProtocol = ProfileNotificationService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
-    
     
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -65,9 +64,15 @@ class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
         setupViews()
         setupConstraints()
         
-        profPresenter.viewDidLoad()
+        if let profile = profileService.profile {
+            updateProfileDetails(profile: profile)
+        } else {
+            print("Profile not found")
+        }
         
-        profileNotificationService.addObserver(self, selector: #selector(handleProfileImageChange), name: ProfileImageService.didChangeNotification, object: nil)
+        profileNotificationService.addObserver(self, selector: #selector(updateAvatar), name: ProfileImageService.didChangeNotification, object: nil)
+        
+        updateAvatar()
     }
     
     override func viewDidLayoutSubviews() {
@@ -113,19 +118,22 @@ class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
         ])
     }
     
-    func updateProfileDetails(profile: Profile) {
+    private func updateProfileDetails(profile: Profile) {
         nameLabel.text = profile.name
         loginNameLabel.text = profile.loginName
         descriptionLabel.text = profile.bio
     }
     
-    func updateAvatar(url: URL) {
+    @objc private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        
         profileImageView.kf.setImage(with: url)
     }
     
-    @objc private func handleProfileImageChange() {
-        profPresenter.updateAvatar()
-    }
+    // MARK: - Actions
     
     @objc private func didTapLogoutButton() {
         print("Logout button tapped")
@@ -158,12 +166,5 @@ class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
             fatalError("Unable to instantiate AuthViewController")
         }
         window.rootViewController = authViewController
-    }
-    
-    var profPresenter: ProfilePresenterProtocol!
-    
-    func configure(_ profPresenter: ProfilePresenterProtocol) {
-        self.profPresenter = profPresenter
-        profPresenter.view = self
     }
 }
