@@ -9,6 +9,7 @@ class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     private let tokenStorage = OAuth2TokenStorage()
+    private let profileLogoutService: ProfileLogoutServiceProtocol = ProfileLogoutService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
     private lazy var profileImageView: UIImageView = {
@@ -154,8 +155,8 @@ class ProfileViewController: UIViewController {
         let cancelAction = UIAlertAction(title: "Нет", style: .cancel)
         let confirmAction = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
             
-            ProfileLogoutService.shared.logout()
-            self!.switchToAuthViewController()
+            self?.profileLogoutService.logout()
+            self?.switchToAuthViewController()
         }
         
         alertController.addAction(cancelAction)
