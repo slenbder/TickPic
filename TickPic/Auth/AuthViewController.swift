@@ -31,7 +31,7 @@ final class AuthViewController: UIViewController {
             }
             let authHelper = AuthHelper()
             let webViewPresenter = WebViewPresenter(authHelper: authHelper)
-            webViewViewController.presenter = webViewPresenter
+            webViewViewController.webPresenter = webViewPresenter
             webViewPresenter.view = webViewViewController
             webViewViewController.delegate = self
         } else {

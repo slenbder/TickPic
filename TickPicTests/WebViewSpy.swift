@@ -2,7 +2,7 @@ import TickPic
 import Foundation
 
 final class WebViewViewControllerSpy: WebViewViewControllerProtocol {
-    var presenter: TickPic.WebViewPresenterProtocol?
+    var webPresenter: TickPic.WebViewPresenterProtocol?
 
     var loadRequestCalled: Bool = false
 

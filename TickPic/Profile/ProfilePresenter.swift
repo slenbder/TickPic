@@ -10,6 +10,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     weak var view: ProfileViewControllerProtocol?
     private let profileService: ProfileService
     private let profileImageService: ProfileImageService
+    
 
     init(profileService: ProfileService = .shared, profileImageService: ProfileImageService = .shared) {
         self.profileService = profileService
