@@ -29,6 +29,7 @@
 		4F73F4802C0764CF00713D0F /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F73F47F2C0764CF00713D0F /* ImagesListService.swift */; };
 		4F73F4822C07651800713D0F /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F73F4812C07651800713D0F /* Photo.swift */; };
 		4F73F4842C086B7200713D0F /* PhotoResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F73F4832C086B7200713D0F /* PhotoResult.swift */; };
+		4F8AAFC42C1EDF2800D75D67 /* ImagesListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8AAFC32C1EDF2800D75D67 /* ImagesListPresenter.swift */; };
 		4F92B8752BD0422E0070FC53 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */; };
 		4F98338B2BFE5B3C0019EA4A /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F98338A2BFE5B3C0019EA4A /* ProfileImageService.swift */; };
 		4F98338E2BFF5E4E0019EA4A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4F98338D2BFF5E4E0019EA4A /* Kingfisher */; };
@@ -83,6 +84,7 @@
 		4F73F47F2C0764CF00713D0F /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
 		4F73F4812C07651800713D0F /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		4F73F4832C086B7200713D0F /* PhotoResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResult.swift; sourceTree = "<group>"; };
+		4F8AAFC32C1EDF2800D75D67 /* ImagesListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenter.swift; sourceTree = "<group>"; };
 		4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F98338A2BFE5B3C0019EA4A /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		4F9B57DA2C1848A3004C8E89 /* PhotoMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMapper.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 		4F4C7EDD2BBEFA8E00F8E8BA /* TickPic */ = {
 			isa = PBXGroup;
 			children = (
+				4F8AAFC92C1EEB6400D75D67 /* ImageListRefactored */,
 				4FCB25652C1CBF8D005F5572 /* Profile */,
 				4FCB25642C1CBF54005F5572 /* Auth */,
 				4F9833862BFDFFA90019EA4A /* Controllers */,
@@ -159,11 +162,21 @@
 			path = TickPic;
 			sourceTree = "<group>";
 		};
+		4F8AAFC92C1EEB6400D75D67 /* ImageListRefactored */ = {
+			isa = PBXGroup;
+			children = (
+				4F4C7EE22BBEFA8E00F8E8BA /* ImagesListViewController.swift */,
+				4F8AAFC32C1EDF2800D75D67 /* ImagesListPresenter.swift */,
+				4F73F47F2C0764CF00713D0F /* ImagesListService.swift */,
+				4FC87F132BC708D1009E0409 /* ImagesListCell.swift */,
+			);
+			path = ImageListRefactored;
+			sourceTree = "<group>";
+		};
 		4F9833862BFDFFA90019EA4A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				4F4C7EDE2BBEFA8E00F8E8BA /* AppDelegate.swift */,
-				4F4C7EE22BBEFA8E00F8E8BA /* ImagesListViewController.swift */,
 				4F4C7EE02BBEFA8E00F8E8BA /* SceneDelegate.swift */,
 				4F6CEFCB2BD544F1004ECE99 /* SingleImageViewController.swift */,
 				4F4333CC2BEBAAB6001C92B4 /* SplashViewController.swift */,
@@ -175,7 +188,6 @@
 		4F9833872BFDFFC00019EA4A /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				4F73F47F2C0764CF00713D0F /* ImagesListService.swift */,
 				4F4333C42BEB8CD8001C92B4 /* OAuth2Service.swift */,
 				4F4333CA2BEB9345001C92B4 /* OAuth2TokenStorage.swift */,
 				4F4333C82BEB91AE001C92B4 /* OAuthTokenResponseBody.swift */,
@@ -187,7 +199,6 @@
 		4F9833882BFDFFCA0019EA4A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4FC87F132BC708D1009E0409 /* ImagesListCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -227,11 +238,11 @@
 				4F92B8742BD0422E0070FC53 /* ProfileViewController.swift */,
 				4FCB25722C1CD78A005F5572 /* ProfileViewControllerProtocol.swift */,
 				4F98338A2BFE5B3C0019EA4A /* ProfileImageService.swift */,
+				4FF8E6382C0240E90075BF3E /* ProfileImageServiceStruct.swift */,
 				4FF297742C14751100377B20 /* ProfileLogoutService.swift */,
 				4FCB25762C1D822E005F5572 /* ProfileLogoutServiceProtocol.swift */,
 				4F3916152BF9EE500003624E /* ProfileService.swift */,
 				4FF8E6362C0240480075BF3E /* ProfileServiceStruct.swift */,
-				4FF8E6382C0240E90075BF3E /* ProfileImageServiceStruct.swift */,
 				4FCB25742C1CD85D005F5572 /* ProfilePresenter.swift */,
 				4FCB257A2C1D855D005F5572 /* ProfileNotificationService.swift */,
 				4FCB25782C1D8520005F5572 /* ProfileNotificationServiceProtocol.swift */,
@@ -382,6 +393,7 @@
 				4F41005E2BE696B400473381 /* AuthConfiguration-Constants.swift in Sources */,
 				4FF8E6392C0240E90075BF3E /* ProfileImageServiceStruct.swift in Sources */,
 				4F3916142BF8ACC50003624E /* UIBlockingProgressHUD.swift in Sources */,
+				4F8AAFC42C1EDF2800D75D67 /* ImagesListPresenter.swift in Sources */,
 				4F6CEFCC2BD544F1004ECE99 /* SingleImageViewController.swift in Sources */,
 				4F4333C72BEB9086001C92B4 /* URLSession+data.swift in Sources */,
 				4FCB25752C1CD85D005F5572 /* ProfilePresenter.swift in Sources */,

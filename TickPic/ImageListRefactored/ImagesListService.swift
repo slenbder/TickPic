@@ -1,5 +1,15 @@
 import Foundation
 
+import Foundation
+
+protocol ImagesListServiceProtocol {
+    var photos: [Photo] { get }
+    func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+}
+
+extension ImagesListService: ImagesListServiceProtocol { }
+
 final class ImagesListService {
     static let shared = ImagesListService()
     internal var photos: [Photo] = []
@@ -16,20 +26,27 @@ final class ImagesListService {
         var request = URLRequest(url: URL(string: "\(Constants.defaultBaseURL)/photos")!)
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        URLSession.shared.data(for: request) { [weak self] result in
-            switch result {
-            case .success(let data):
-                do {
-                    let photoResults = try JSONDecoder().decode([PhotoResult].self, from: data)
-                    self?.photos.append(contentsOf: photoResults.map { PhotoMapper.map(from: $0) })
-                    NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
-                } catch {
-                    print("Failed to decode photos: \(error)")
-                }
-            case .failure(let error):
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            if let error = error {
                 print("Failed to fetch photos: \(error)")
+                return
+            }
+            
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+            
+            do {
+                let photoResults = try JSONDecoder().decode([PhotoResult].self, from: data)
+                self?.photos.append(contentsOf: photoResults.map { PhotoMapper.map(from: $0) })
+                NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+            } catch {
+                print("Failed to decode photos: \(error)")
             }
         }
+        
+        task.resume()
     }
     
     func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -43,14 +60,21 @@ final class ImagesListService {
         request.httpMethod = isLike ? "POST" : "DELETE"
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        URLSession.shared.data(for: request) { result in
-            switch result {
-            case .success:
-                completion(.success(()))
-            case .failure(let error):
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
                 completion(.failure(error))
+                return
             }
+            
+            guard data != nil else {
+                completion(.failure(NetworkError.urlRequestError(NSError(domain: "No data received", code: 0, userInfo: nil))))
+                return
+            }
+            
+            completion(.success(()))
         }
+        
+        task.resume()
     }
     
     func clearPhotos() {
