@@ -4,7 +4,13 @@ protocol ImagesListCellDelegate: AnyObject {
     func imageListCellDidTapLike(_ cell: ImagesListCell)
 }
 
-final class ImagesListCell: UITableViewCell {
+protocol ImagesListCellProtocol: AnyObject {
+    var delegate: ImagesListCellDelegate? { get set }
+    func setIsLiked(_ isLiked: Bool)
+    func setLikeButtonEnabled(_ isEnabled: Bool)
+}
+
+final class ImagesListCell: UITableViewCell, ImagesListCellProtocol {
     static let reuseIdentifier = "ImagesListCell"
     
     @IBOutlet var cellImage: UIImageView!

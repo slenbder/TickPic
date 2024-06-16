@@ -1,16 +1,6 @@
 import Foundation
 
-import Foundation
-
-protocol ImagesListServiceProtocol {
-    var photos: [Photo] { get }
-    func fetchPhotosNextPage()
-    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void)
-}
-
-extension ImagesListService: ImagesListServiceProtocol { }
-
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     static let shared = ImagesListService()
     internal var photos: [Photo] = []
     private let tokenStorage = OAuth2TokenStorage()

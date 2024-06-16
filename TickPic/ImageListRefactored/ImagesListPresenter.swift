@@ -11,7 +11,7 @@ final class ImagesListPresenter {
     
     private weak var view: ImagesListView?
     private let imagesListService: ImagesListServiceProtocol
-    private var photos: [Photo] = []
+    private(set) var photos: [Photo] = [] // Сделаем photos доступными для тестирования
     private var imagesListServiceObserver: NSObjectProtocol?
     
     init(view: ImagesListView, service: ImagesListServiceProtocol) {
@@ -36,7 +36,7 @@ final class ImagesListPresenter {
         }
     }
     
-    private func updatePhotos() {
+    func updatePhotos() {
         photos = imagesListService.photos
         view?.updateTableView()
     }
@@ -53,7 +53,7 @@ final class ImagesListPresenter {
         return photos[index]
     }
     
-    func didTapLikeButton(at index: Int, cell: ImagesListCell) {
+    func didTapLikeButton(at index: Int, cell: ImagesListCellProtocol) {
         let photo = photos[index]
         view?.showLoading()
         imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
