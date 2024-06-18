@@ -1,74 +1,94 @@
+//
+//  ImagesListService.swift
+//  ImageFeed
+//
+//  Created by Alexander Salagubov on 25.05.2024.
+//
+
 import Foundation
 
-final class ImagesListService: ImagesListServiceProtocol {
-    static let shared = ImagesListService()
-    internal var photos: [Photo] = []
-    private let tokenStorage = OAuth2TokenStorage()
-    
-    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
-    
-    func fetchPhotosNextPage() {
-        guard let token = tokenStorage.token else {
-            print("No token found")
-            return
-        }
-        
-        var request = URLRequest(url: URL(string: "\(Constants.defaultBaseURL)/photos")!)
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            if let error = error {
-                print("Failed to fetch photos: \(error)")
-                return
-            }
-            
-            guard let data = data else {
-                print("No data received")
-                return
-            }
-            
-            do {
-                let photoResults = try JSONDecoder().decode([PhotoResult].self, from: data)
-                self?.photos.append(contentsOf: photoResults.map { PhotoMapper.map(from: $0) })
-                NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
-            } catch {
-                print("Failed to decode photos: \(error)")
-            }
-        }
-        
-        task.resume()
+
+final class ImagesListService {
+
+  private (set) var photos: [Photo] = []
+  private var lastLoadedPage: Int?
+  private var task: URLSessionTask?
+  private let urlSession = URLSession.shared
+  private let token = OAuth2TokenStorage()
+
+  static let shared = ImagesListService()
+  static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
+  init() {}
+
+  func makePhotoRequest(page: Int, per_page: Int) -> URLRequest? {
+    let baseURL = Constants.defaultBaseURL
+
+    var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
+    components?.path = "/photos"
+    components?.queryItems = [
+      URLQueryItem(name: "page", value: "\(page)"),
+      URLQueryItem(name: "per_page", value: "\(per_page)"),
+      URLQueryItem(name: "client_id", value: Constants.accessKey),
+    ]
+
+    guard let url = components?.url else {
+      assertionFailure("Failed to create URL")
+      return nil
     }
-    
-    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let token = tokenStorage.token else {
-            completion(.failure(NetworkError.urlRequestError(NSError(domain: "No token found", code: 0, userInfo: nil))))
-            return
-        }
-        
-        let url = URL(string: "\(Constants.defaultBaseURL)/photos/\(photoId)/like")!
-        var request = URLRequest(url: url)
-        request.httpMethod = isLike ? "POST" : "DELETE"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard data != nil else {
-                completion(.failure(NetworkError.urlRequestError(NSError(domain: "No data received", code: 0, userInfo: nil))))
-                return
-            }
-            
-            completion(.success(()))
-        }
-        
-        task.resume()
+    var request = URLRequest(url: url)
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    return request
+  }
+
+  func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    let baseURL = Constants.defaultBaseURL.appendingPathComponent("photos/\(photoId)/like")
+
+    var request = URLRequest(url: baseURL)
+    request.httpMethod = isLike ? "POST" : "DELETE"
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+      if let error = error {
+        completion(.failure(error))
+        return
+      }
+      completion(.success(()))
     }
-    
-    func clearPhotos() {
-        photos.removeAll()
-        NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+    task.resume()
+  }
+
+  func fetchPhotosNextPage() {
+    assert(Thread.isMainThread)
+    guard task == nil else { return }
+    let nextPage = (lastLoadedPage ?? 0) + 1
+
+    guard let request = makePhotoRequest(page: nextPage, per_page: 10) else {
+      return
     }
+
+    let task = urlSession.objectTask(for: request){ [weak self] (result: Result<[PhotoResult], Error>)  in
+      guard let self else { return }
+      switch result {
+      case .success(let responsePhoto):
+        let newPhoto = responsePhoto.map { Photo(photoResult: $0) }
+        DispatchQueue.main.async {
+          self.photos.append(contentsOf: newPhoto)
+          self.lastLoadedPage = nextPage
+          NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+        }
+      case .failure(let error):
+        print("[ImagesListService]: AuthServiceError - \(error)")
+      }
+      self.task = nil
+    }
+    self.task = task
+    task.resume()
+  }
+  
+}
+extension ImagesListService {
+  func clearImagesData() {
+    self.photos = []
+    self.lastLoadedPage = nil
+  }
 }

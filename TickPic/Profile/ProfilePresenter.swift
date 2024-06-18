@@ -1,39 +1,70 @@
 import Foundation
+import Kingfisher
+import UIKit
 
-public protocol ProfilePresenterProtocol {
-    var view: ProfileViewControllerProtocol? { get set }
-    func viewDidLoad()
-    func updateAvatar()
+public protocol ProfileViewPresenterProtocol {
+  var view: ProfileViewControllerProtocol? { get set }
+  func viewDidLoad()
+  func updateAvatar()
+  func notificationObserver()
+  func didTapLogoutButton()
 }
 
-final class ProfilePresenter: ProfilePresenterProtocol {
-    weak var view: ProfileViewControllerProtocol?
-    private let profileService: ProfileService
-    private let profileImageService: ProfileImageService
+final class ProfileViewPresenter: ProfileViewPresenterProtocol {
 
-    init(profileService: ProfileService = .shared, profileImageService: ProfileImageService = .shared) {
-        self.profileService = profileService
-        self.profileImageService = profileImageService
+  weak var view: ProfileViewControllerProtocol?
+  private var profileImageServiceObserver: NSObjectProtocol?
+  private let avatarImageView = UIImageView(image: .avatar)
+
+  init(view: ProfileViewControllerProtocol?) {
+    self.view = view
+    notificationObserver()
+  }
+
+  func viewDidLoad() {
+    notificationObserver()
+    updateAvatar()
+    view?.displayProfileData(name: ProfileService.shared.profile?.name,
+                             loginName: ProfileService.shared.profile?.loginName,
+                             bio: ProfileService.shared.profile?.bio)
+  }
+
+  func updateAvatar() {
+    guard
+      let profileImageURL = ProfileImageService.shared.avatarURL,
+      let url = URL(string: profileImageURL)
+    else { return }
+    avatarImageView.kf.setImage(with: url) { result in
+      switch result {
+      case .success(let value):
+        self.view?.displayAvatar(image: value.image)
+      case .failure(let error):
+        print(error)
+      }
     }
-
-    func viewDidLoad() {
-        if let profile = profileService.profile {
-            view?.updateProfileDetails(profile: profile)
-        }
-        updateAvatar()
-    }
-
-    func updateAvatar() {
-        guard let username = profileService.profile?.username else { return }
-        profileImageService.fetchProfileImageURL(username: username) { [weak self] result in
-            switch result {
-            case .success(let urlString):
-                if let url = URL(string: urlString) {
-                    self?.view?.updateAvatar(url: url)
-                }
-            case .failure(let error):
-                print("Error fetching profile image URL: \(error)")
-            }
-        }
+  }
+  func notificationObserver() {
+    profileImageServiceObserver = NotificationCenter.default
+      .addObserver(
+        forName: ProfileImageService.didChangeNotification,
+        object: nil,
+        queue: .main
+      ) { [weak self] _ in
+        guard let self = self else { return }
+        self.updateAvatar()
+      }
+  }
+    func didTapLogoutButton() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Нет", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "Да", style: .default) { _ in
+            ProfileLogoutService.shared.logout()
+        })
+        alert.view.accessibilityIdentifier = "logoutAlert"
+        view?.present(alert, animated: true, completion: nil)
     }
 }

@@ -1,73 +1,56 @@
 import Foundation
 
-protocol ImagesListView: AnyObject {
-    func updateTableView()
-    func showLoading()
-    func hideLoading()
-    func updateCell(at indexPath: IndexPath, with isLiked: Bool)
+public protocol ImagesListViewPresenterProtocol {
+  var view: ImagesListViewControllerProtocol? { get set }
+  func viewDidLoad()
+  func fetchPhotosNextPage()
+  func changeLike(photoId: String, isLiked: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+  func configDate(from date: String) -> String?
 }
 
-final class ImagesListPresenter {
-    
-    private weak var view: ImagesListView?
-    private let imagesListService: ImagesListServiceProtocol
-    private(set) var photos: [Photo] = [] // Сделаем photos доступными для тестирования
-    private var imagesListServiceObserver: NSObjectProtocol?
-    
-    init(view: ImagesListView, service: ImagesListServiceProtocol) {
-        self.view = view
-        self.imagesListService = service
-        setupObservers()
+final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
+  
+  var view: ImagesListViewControllerProtocol?
+  private let imageListService: ImagesListService
+  private let dateFormatter8601 = ISO8601DateFormatter()
+  
+  private lazy var dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "d MMMM yyyy"
+    formatter.locale = Locale(identifier: "ru_RU")
+    return formatter
+  }()
+  
+  init(view: ImagesListViewControllerProtocol?, imageListService: ImagesListService = ImagesListService.shared) {
+    self.view = view
+    self.imageListService = imageListService
+  }
+  
+  func viewDidLoad() {
+    fetchPhotosNextPage()
+  }
+  
+  @objc private func updateTableViewAnimated() {
+    view?.updateTableViewAnimated()
+  }
+  
+  public func fetchPhotosNextPage() {
+    imageListService.fetchPhotosNextPage()
+  }
+
+  public func changeLike(photoId: String, isLiked: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    UIBlockingProgressHUD.show()
+    imageListService.changeLike(photoId: photoId, isLike: isLiked) { result in
+      DispatchQueue.main.async {
+        UIBlockingProgressHUD.dismiss()
+        completion(result)
+      }
     }
-    
-    deinit {
-        if let observer = imagesListServiceObserver {
-            NotificationCenter.default.removeObserver(observer)
-        }
-    }
-    
-    private func setupObservers() {
-        imagesListServiceObserver = NotificationCenter.default.addObserver(
-            forName: ImagesListService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.updatePhotos()
-        }
-    }
-    
-    func updatePhotos() {
-        photos = imagesListService.photos
-        view?.updateTableView()
-    }
-    
-    func fetchNextPage() {
-        imagesListService.fetchPhotosNextPage()
-    }
-    
-    func numberOfPhotos() -> Int {
-        return photos.count
-    }
-    
-    func photo(at index: Int) -> Photo {
-        return photos[index]
-    }
-    
-    func didTapLikeButton(at index: Int, cell: ImagesListCellProtocol) {
-        let photo = photos[index]
-        view?.showLoading()
-        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.view?.hideLoading()
-                switch result {
-                case .success:
-                    self?.photos[index].isLiked.toggle()
-                    self?.view?.updateCell(at: IndexPath(row: index, section: 0), with: self?.photos[index].isLiked ?? false)
-                case .failure(let error):
-                    print("Failed to change like: \(error.localizedDescription)")
-                }
-                cell.setLikeButtonEnabled(true)
-            }
-        }
-    }
+  }
+  
+  public func configDate(from date: String) -> String? {
+    guard let date = dateFormatter8601.date(from: date) else { return nil }
+    return dateFormatter.string(from: date)
+  }
+  
 }

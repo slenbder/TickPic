@@ -1,53 +1,60 @@
 import Foundation
 
-// MARK: - ProfileService
-
 final class ProfileService {
+  private let urlSession = URLSession.shared
+  private var task: URLSessionTask?
+  private let decoder: JSONDecoder = JSONDecoder()
+  static let shared = ProfileService()
+  private(set) var profile: Profile?
+  private var lastToken: String?
+  private init () {}
+  
+  private func makeInfoRequest(token: String) -> URLRequest? {
+    let baseURL = Constants.defaultBaseURL
     
-    // MARK: - Constants
+    var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
+    components?.path = "/me"
     
-    static let shared = ProfileService()
+    guard let url = components?.url else {
+      assertionFailure("Failed to create URL")
+      return nil
+    }
+    var request = URLRequest(url: url)
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    return request
+  }
+  
+  func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+    assert(Thread.isMainThread)
+    task?.cancel()
+    lastToken = token
     
-    // MARK: - Properties
-    
-    private(set) var currentProfile: Profile?
-    private(set) var profile: Profile?
-    
-    // MARK: - Initializer
-    
-    private init() {}
-    
-    // MARK: - Public Methods
-    
-    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
-        let url = URL(string: Constants.meEndpoint)!
-        let request = makeRequest(url: url, bearerToken: token)
-        
-        URLSession.shared.objectTask(for: request) { (result: Result<ProfileResult, Error>) in
-            switch result {
-            case .success(let profileResult):
-                let profile = Profile(username: profileResult.username, firstName: profileResult.firstName, lastName: profileResult.lastName, bio: profileResult.bio)
-                self.currentProfile = profile
-                self.profile = profile
-                completion(.success(profile))
-            case .failure(let error):
-                completion(.failure(error))
-                print("Error fetching profile: \(error.localizedDescription)")
-            }
-        }.resume()
+    guard let request = makeInfoRequest(token: token) else {
+      print("[ProfileService]: makeInfoRequest - \(AuthServiceError.invalidRequest)")
+      completion(.failure(AuthServiceError.invalidRequest))
+      return
     }
     
-    func clearProfile() {
-        currentProfile = nil
-        profile = nil
+    let task = urlSession.objectTask(for: request){ [weak self] (result: Result<ProfileResult, Error>)  in
+      guard let self else { return }
+      switch result {
+      case .success(let profileResponse):
+        let profile = Profile(editorProfile: profileResponse)
+        self.profile = profile
+        completion(.success(profile))
+      case .failure(let error):
+        print("[ProfileService]: NetworkError - \(error)")
+        completion(.failure(error))
+      }
+      self.lastToken = nil
+      self.task = nil
     }
-    
-    // MARK: - Private Methods
-    
-    private func makeRequest(url: URL, bearerToken: String) -> URLRequest {
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        return request
-    }
+    self.task = task
+    task.resume()
+  }
+}
+extension ProfileService {
+  func clearProfileData() {
+    self.profile = nil
+  }
 }

@@ -1,68 +1,64 @@
 import Foundation
 
-// MARK: - ProfileImageService
-
 final class ProfileImageService {
-    
-    // MARK: - Constants
-    
-    static let shared = ProfileImageService()
-    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
-    
-    // MARK: - Properties
-    
-    private var currentTask: URLSessionTask?
-    private(set) var avatarURL: String?
-    
-    // MARK: - Initializer
-    
-    private init() {}
-    
-    // MARK: - Public Methods
-    
-    func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
-        currentTask?.cancel()
-        
-        let tokenStorage = OAuth2TokenStorage()
-        guard let token = tokenStorage.token else {
-            let error = NSError(domain: "No token found", code: 0, userInfo: nil)
-            completion(.failure(error))
-            print("Error: \(error.localizedDescription)")
-            return
-        }
-        
-        let urlString = "\(Constants.defaultBaseURL)/users/\(username)"
-        guard let url = URL(string: urlString) else {
-            let error = NSError(domain: "Invalid URL", code: 0, userInfo: nil)
-            completion(.failure(error))
-            print("Error: \(error.localizedDescription)")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        currentTask = URLSession.shared.objectTask(for: request) { (result: Result<UserResult, Error>) in
-            switch result {
-            case .success(let userResult):
-                let profileImageURL = userResult.profileImage.large
-                self.avatarURL = profileImageURL
-                completion(.success(profileImageURL))
-                
-                NotificationCenter.default.post(
-                    name: ProfileImageService.didChangeNotification,
-                    object: self,
-                    userInfo: ["URL": profileImageURL]
-                )
-            case .failure(let error):
-                completion(.failure(error))
-                print("Error fetching profile image URL: \(error.localizedDescription)")
-            }
-        }
-        currentTask?.resume()
+  static let shared = ProfileImageService()
+  static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+  private (set) var avatarURL: String?
+  private var task: URLSessionTask?
+  private let urlSession = URLSession.shared
+  private let token = OAuth2TokenStorage()
+  private let decoder: JSONDecoder = JSONDecoder()
+  private init () {}
+
+  private func makeProfileInfoRequest(token: String, username: String) -> URLRequest? {
+    let baseURL = Constants.defaultBaseURL
+
+    var imageURL = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
+    imageURL?.path = "/users/\(username)"
+
+    guard let url = imageURL?.url else {
+      assertionFailure("Failed to create URL")
+      return nil
     }
-    
-    func clearAvatarURL() {
-        avatarURL = nil
+    var request = URLRequest(url: url)
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    return request
+  }
+
+
+  func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
+    assert(Thread.isMainThread)
+    task?.cancel()
+
+    guard let request = makeProfileInfoRequest(token: token.token!, username: username) else {
+      completion(.failure(AuthServiceError.invalidRequest))
+      return
     }
+
+    let task = urlSession.objectTask(for: request){ [weak self] (result: Result<ProfileResult, Error>)  in
+      guard let self else { return }
+      switch result {
+      case .success(let profileResponseImage):
+        let avatarURL = profileResponseImage.profileImage.large
+        self.avatarURL = avatarURL
+        completion(.success(avatarURL))
+        print("Successfully parsed: \(avatarURL)")
+        NotificationCenter.default.post(
+          name: ProfileImageService.didChangeNotification,
+          object: self,
+          userInfo: ["URL": avatarURL])
+
+      case .failure(let error):
+        print("[ProfileImageService]: AuthServiceError - \(error)")
+        completion(.failure(error))
+      }
+      self.task = nil
+    }
+    self.task = task
+    task.resume()
+  }
+}
+extension ProfileImageService {
+  func clearProfileImage() {
+  }
 }
