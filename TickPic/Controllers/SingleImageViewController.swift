@@ -2,7 +2,9 @@ import Foundation
 import UIKit
 
 final class SingleImageViewController: UIViewController {
+    
     var imageURL: URL? {
+        
         didSet{
             guard isViewLoaded else { return }
             loadImage()
@@ -18,13 +20,10 @@ final class SingleImageViewController: UIViewController {
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         scrollView.delegate = self
-        
-        guard let imageURL = imageURL else {
-            return
+        if let imageURL = imageURL {
+            loadImage()
         }
-        loadImage(from: imageURL)}
-    
-    func loadImage(from url: URL) {}
+    }
     
     private func loadImage() {
         guard let imageURL = imageURL else { return }

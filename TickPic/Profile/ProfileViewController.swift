@@ -2,7 +2,9 @@ import Kingfisher
 import UIKit
 
 public protocol ProfileViewControllerProtocol: AnyObject {
+    
     var presenter: ProfileViewPresenterProtocol? { get set }
+    
     func displayAvatar(image: UIImage?)
     func displayProfileData(name: String?, loginName: String?, bio: String?)
     func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)
@@ -22,37 +24,34 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Dart Vader"
+        label.text = "Billy Herrington"
         label.textColor = .white
-        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.font = .systemFont(ofSize: 23, weight: .bold)
         return label
     }()
     private let userNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "@DarkLord"
+        label.text = "@dungeon_master"
         label.textColor = .gray
         label.font = .systemFont(ofSize: 13, weight: .regular)
         return label
     }()
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello, World!"
+        label.text = "Hello, gay!"
         label.textColor = .white
         label.font = .systemFont(ofSize: 13, weight: .regular)
         return label
     }()
     let logoutButton: UIButton = {
-        guard let image = UIImage(systemName: "Exit Button") else {
-            return UIButton()
-        }
-        let button = UIButton.systemButton(
-            with: image,
-            target: ProfileViewController.self,
-            action: #selector(Self.didTapLogoutButton)
-        )
-        button.tintColor = .red
-        button.accessibilityIdentifier = "logoutButton"
-        return button
+      let button = UIButton.systemButton(
+        with: UIImage(named: "Exit Button")!,
+        target: self,
+        action: #selector(Self.didTapLogoutButton)
+      )
+      button.tintColor = .red
+      button.accessibilityIdentifier = "logoutButton"
+      return button
     }()
     
     override func viewDidLoad() {
