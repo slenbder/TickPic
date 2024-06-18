@@ -46,6 +46,17 @@
                </Test>
             </SkippedTests>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4F8B9B712C21D88000091579"
+               BuildableName = "TickPicUITests.xctest"
+               BlueprintName = "TickPicUITests"
+               ReferencedContainer = "container:TickPic.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
