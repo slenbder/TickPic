@@ -31,8 +31,9 @@ final class ImagesListViewPresenterSpy: ImagesListViewPresenterProtocol {
         guard let date = dateFormatter8601.date(from: date) else { return nil }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMMM yyyy"
-        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale.current
         
         return dateFormatter.string(from: date)
     }

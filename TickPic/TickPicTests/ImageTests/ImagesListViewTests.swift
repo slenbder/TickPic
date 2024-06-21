@@ -48,10 +48,10 @@ final class ImagesListViewTests: XCTestCase {
     
     func testConfigDate() {
         let presenter = ImagesListViewPresenterSpy()
-        let date = "1998-10-16T17:35:56Z"
+        let date = "2007-10-16T17:35:56Z"
         let formattedDate = presenter.configDate(from: date)
         
-        XCTAssertEqual(formattedDate, "16 октября 1998", "Date should be formatted correctly")
+        XCTAssertEqual(formattedDate, "16 октября 2007", "Date should be formatted correctly")
     }
 }
 

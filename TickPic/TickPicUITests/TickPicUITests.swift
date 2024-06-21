@@ -49,7 +49,7 @@ final class TickPicUITests: XCTestCase {
     tablesQuery.element.swipeUp()
 
 
-    let cellToLike = tablesQuery.cells.firstMatch
+    let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 0)
     let likeButton = cellToLike.buttons["LikeButton"]
     likeButton.tap()
     sleep(5)
