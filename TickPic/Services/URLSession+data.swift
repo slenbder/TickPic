@@ -1,70 +1,50 @@
 import Foundation
 
-// MARK: - NetworkError
 
 enum NetworkError: Error {
-    case httpStatusCode(Int)
-    case urlRequestError(Error)
-    case urlSessionError
+  case httpStatusCode(Int)
+  case urlRequestError(Error)
+  case urlSessionError
 }
 
-// MARK: - URLSession Extension
-
 extension URLSession {
-    
-    // MARK: - Data Task
-    
-    func data(
-        for request: URLRequest,
-        completion: @escaping (Result<Data, Error>) -> Void
-    ) -> URLSessionTask {
-        let fulfillCompletionOnMainThread: (Result<Data, Error>) -> Void = { result in
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        }
-        
-        let task = dataTask(with: request) { data, response, error in
-            if let data = data, let response = response as? HTTPURLResponse {
-                if 200 ..< 300 ~= response.statusCode {
-                    fulfillCompletionOnMainThread(.success(data))
-                } else {
-                    print("HTTP Status Code Error: \(response.statusCode), Response Data: \(String(data: data, encoding: .utf8) ?? "")")
-                    fulfillCompletionOnMainThread(.failure(NetworkError.httpStatusCode(response.statusCode)))
-                }
-            } else if let error = error {
-                print("URL Request Error: \(error.localizedDescription)")
-                fulfillCompletionOnMainThread(.failure(NetworkError.urlRequestError(error)))
-            } else {
-                print("URL Session Error")
-                fulfillCompletionOnMainThread(.failure(NetworkError.urlSessionError))
-            }
-        }
-        
-        task.resume()
-        return task
+  func objectTask<T: Decodable>(
+    for request: URLRequest,
+    completion: @escaping (Result<T, Error>) -> Void
+  ) -> URLSessionTask {
+    let decoder: JSONDecoder = {
+          let result = JSONDecoder()
+          result.keyDecodingStrategy = .convertFromSnakeCase
+          return result
+        }()
+
+    let fulfillCompletionOnTheMainThread: (Result<T, Error>) -> Void = { result in
+      DispatchQueue.main.async {
+        completion(result)
+      }
     }
-    
-    // MARK: - Object Task
-    
-    func objectTask<T: Decodable>(
-        for request: URLRequest,
-        completion: @escaping (Result<T, Error>) -> Void
-    ) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        return data(for: request) { (result: Result<Data, Error>) in
-            switch result {
-            case .success(let data):
-                do {
-                    let decodedObject = try decoder.decode(T.self, from: data)
-                    completion(.success(decodedObject))
-                } catch {
-                    print("Decoding Error: \(error.localizedDescription), Data: \(String(data: data, encoding: .utf8) ?? "")")
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
+
+    let task = dataTask(with: request, completionHandler: { data, response, error in
+      if let data = data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode {
+        if 200 ..< 300 ~= statusCode {
+          do {
+            let decodedObject = try decoder.decode(T.self, from: data)
+            fulfillCompletionOnTheMainThread(.success(decodedObject))
+          } catch {
+            print("Ошибка декодирования: \(error.localizedDescription), данные: \(String(data: data, encoding: .utf8) ?? "")")
+            fulfillCompletionOnTheMainThread(.failure(error))
+          }
+        } else {
+          fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
         }
-    }
+      } else if let error = error {
+        fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
+      } else {
+        fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
+      }
+    })
+
+    task.resume()
+    return task
+  }
 }

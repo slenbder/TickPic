@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment version="5120" identifier="iOS"/>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -46,7 +46,7 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ImH-jZ-F0c" userLabel="Like Button">
+                                                <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="LikeButton" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ImH-jZ-F0c" userLabel="Like Button">
                                                     <rect key="frame" x="370" y="4" width="44" height="44"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="LikeButton"/>
                                                     <constraints>
@@ -56,7 +56,7 @@
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="like_button_on"/>
                                                     <connections>
-                                                        <action selector="likeButtonClicked" destination="5mC-zv-dqS" eventType="touchUpInside" id="NZN-hf-CUI"/>
+                                                        <action selector="likeButtonClicked:" destination="5mC-zv-dqS" eventType="touchUpInside" id="aTN-nv-GIE"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -130,6 +130,7 @@
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KuD-Wh-r7b" userLabel="Back Button">
                                 <rect key="frame" x="8" y="8" width="48" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="BackButton"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="nSL-2W-zFJ"/>
                                     <constraint firstAttribute="width" constant="48" id="p7Y-Bg-VYK"/>
@@ -145,7 +146,7 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="Sharing"/>
                                 <connections>
-                                    <action selector="didTapShareButton:" destination="IZD-mr-QcE" eventType="touchUpInside" id="uSP-sV-fHJ"/>
+                                    <action selector="didTapShareButton" destination="IZD-mr-QcE" eventType="touchUpInside" id="2DN-qE-Qml"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -187,8 +188,9 @@
                                     <constraint firstAttribute="width" constant="60" id="gUh-Co-w3t"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZIF-93-iO3">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZIF-93-iO3" userLabel="Authenticate">
                                 <rect key="frame" x="16" y="726" width="398" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="dGa-OO-0Gb"/>
                                 </constraints>
@@ -225,12 +227,12 @@
         <!--Web View View Controller-->
         <scene sceneID="Gq9-Bq-oAR">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="if2-we-AN8" customClass="WebViewViewController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="UnsplashWebView" storyboardIdentifier="WebViewViewController" modalPresentationStyle="fullScreen" id="if2-we-AN8" customClass="WebViewViewController" customModule="TickPic" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WqB-Ap-yqI">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lOl-fI-Fec">
+                            <wkWebView contentMode="scaleToFill" restorationIdentifier="UnsplashWebView" translatesAutoresizingMaskIntoConstraints="NO" id="lOl-fI-Fec" userLabel="WebView">
                                 <rect key="frame" x="0.0" y="103" width="430" height="829"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
@@ -242,6 +244,18 @@
                                 <rect key="frame" x="0.0" y="103" width="430" height="4"/>
                                 <color key="tintColor" name="ypBlack"/>
                             </progressView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ibq-Qe-RlZ">
+                                <rect key="frame" x="0.0" y="103" width="64" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="64" id="JBE-PV-2Hf"/>
+                                    <constraint firstAttribute="height" constant="44" id="QL7-wt-bS0"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="nav_back_button"/>
+                                <connections>
+                                    <action selector="didTapBackButton:" destination="if2-we-AN8" eventType="touchUpInside" id="s7P-An-28k"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bj1-JS-2YS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -250,8 +264,10 @@
                             <constraint firstItem="zIG-gU-dup" firstAttribute="leading" secondItem="Bj1-JS-2YS" secondAttribute="leading" id="QUI-Oy-vfo"/>
                             <constraint firstItem="zIG-gU-dup" firstAttribute="top" secondItem="Bj1-JS-2YS" secondAttribute="top" id="YVa-lK-IrS"/>
                             <constraint firstItem="lOl-fI-Fec" firstAttribute="top" secondItem="Bj1-JS-2YS" secondAttribute="top" id="cWB-10-xAC"/>
+                            <constraint firstItem="ibq-Qe-RlZ" firstAttribute="leading" secondItem="Bj1-JS-2YS" secondAttribute="leading" id="db4-aX-kbI"/>
                             <constraint firstAttribute="trailing" secondItem="lOl-fI-Fec" secondAttribute="trailing" id="iWe-DZ-Jqs"/>
                             <constraint firstAttribute="bottom" secondItem="lOl-fI-Fec" secondAttribute="bottom" id="nYx-H5-hTE"/>
+                            <constraint firstItem="Bj1-JS-2YS" firstAttribute="top" secondItem="ibq-Qe-RlZ" secondAttribute="top" id="slk-RN-lRm"/>
                             <constraint firstItem="lOl-fI-Fec" firstAttribute="leading" secondItem="WqB-Ap-yqI" secondAttribute="leading" id="xOX-Dv-DWg"/>
                         </constraints>
                     </view>
@@ -268,7 +284,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="xSp-YN-Ew0">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarController" id="FY2-qV-LV0" customClass="TabBarController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="FY2-qV-LV0" customClass="TabBarController" customModule="TickPic" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="XZI-dE-J4J"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1yH-a2-QQI">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>

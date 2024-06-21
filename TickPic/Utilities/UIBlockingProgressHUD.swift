@@ -1,20 +1,19 @@
-import ProgressHUD
+import Foundation
 import UIKit
+import ProgressHUD
 
 final class UIBlockingProgressHUD {
-    // MARK: - Public Methods
-    
-    static func show() {
-        DispatchQueue.main.async {
-            ProgressHUD.animate()
-        }
-    }
-
-    static func dismiss() {
-        DispatchQueue.main.async {
-            ProgressHUD.dismiss()
-        }
-    }
+  private static var window: UIWindow? {
+    return UIApplication.shared.windows.first
+  }
+  static func show() {
+    window?.isUserInteractionEnabled = false
+    ProgressHUD.animate()
+  }
+  static func dismiss() {
+    window?.isUserInteractionEnabled = true
+    ProgressHUD.dismiss()
+  }
 }
 
 

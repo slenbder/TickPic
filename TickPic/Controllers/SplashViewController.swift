@@ -1,111 +1,99 @@
+import Foundation
 import UIKit
-
-// MARK: - SplashViewController
+import ProgressHUD
 
 final class SplashViewController: UIViewController {
-
-    // MARK: - Properties
     
-    private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
+    private let oauth2Service = OAuth2Service.shared
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
-
-    // MARK: - UI Elements
     
-    private let splashScreenLogo: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "Vector"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+    private let splashImageView: UIImageView = {
+      let imageView = UIImageView(image: UIImage(named: "vector"))
+      imageView.translatesAutoresizingMaskIntoConstraints = false
+      return imageView
     }()
     
-    // MARK: - View Lifecycle
-    
     override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "ypBlack")
-        setupViews()
-        setupConstraints()
+        setupSplashViewController()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        handleToken()
-    }
-    
-    // MARK: - Private Methods
-    
-    private func setupViews() {
-        view.addSubview(splashScreenLogo)
-    }
-
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            splashScreenLogo.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            splashScreenLogo.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            splashScreenLogo.widthAnchor.constraint(equalToConstant: 72.52),
-            splashScreenLogo.heightAnchor.constraint(equalToConstant: 75.11)
-        ])
-    }
-
-    private func handleToken() {
+        
         if let token = oauth2TokenStorage.token {
             fetchProfile(token)
         } else {
-            presentAuthViewController()
+            switchToAuthViewController()
         }
+        
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+    
+    private func setupSplashViewController() {
+        view.backgroundColor = .ypBlack
+        view.addSubview(splashImageView)
+        NSLayoutConstraint.activate([
+            splashImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            splashImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
     private func switchToTabBarController() {
-        DispatchQueue.main.async {
-            guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-            let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-                .instantiateViewController(withIdentifier: "TabBarController")
-            window.rootViewController = tabBarController
-        }
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        let tabBarController = UIStoryboard(name: "Main", bundle: .main)
+            .instantiateViewController(withIdentifier: "TabBarViewController")
+        window.rootViewController = tabBarController
     }
-
-    private func presentAuthViewController() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    
+    
+    private func switchToAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
         guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
-            fatalError("Failed to instantiate AuthViewController")
+            fatalError("AuthViewController not found in storyboard")
         }
         authViewController.delegate = self
         authViewController.modalPresentationStyle = .fullScreen
         present(authViewController, animated: true, completion: nil)
     }
-
-    private func fetchProfile(_ token: String) {
-        profileService.fetchProfile(token) { [weak self] result in
-            switch result {
-            case .success(let profile):
-                self?.profileImageService.fetchProfileImageURL(username: profile.username) { _ in }
-                self?.switchToTabBarController()
-            case .failure(let error):
-                print("Error fetching profile: \(error)")
-            }
-        }
+}
+// MARK: - AuthViewControllerDelegate
+extension SplashViewController: AuthViewControllerDelegate {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode token: String) {
+        dismiss(animated: true)
     }
     
-    private func fetchOAuthToken(_ code: String) {
-        oauth2Service.fetchOAuthToken(with: code) { [weak self] result in
-            switch result {
-            case .success(let accessToken):
-                self?.oauth2TokenStorage.token = accessToken
-                self?.fetchProfile(accessToken)
-            case .failure(let error):
-                print("Error fetching OAuth2 token: \(error)")
-            }
-        }
+    func didAuthenticate(_ vc: AuthViewController) {
+        vc.dismiss(animated: true)
     }
-}
-
-// MARK: - AuthViewControllerDelegate
-
-extension SplashViewController: AuthViewControllerDelegate {
-    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true) { [weak self] in
-            self?.fetchOAuthToken(code)
+    
+    private func fetchProfile(_ token: String) {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let profileResult):
+                let username = profileResult.userName
+                profileImageService.fetchProfileImageURL(username: username) { _ in }
+                print("Parsing completed")
+                self.switchToTabBarController()
+                
+            case .failure:
+                print("Parsing Data Error")
+                break
+            }
         }
     }
 }
